@@ -7,6 +7,7 @@
  **/
 
 // DEMO Swticher Base
+
 jQuery('.demo-icon').click(function(){
 	if(jQuery('.demo_changer').hasClass("active")){
 		jQuery('.demo_changer').animate({"right":"-270px"},function(){
@@ -31,5 +32,6 @@ jQuery('.page').click(function(){
 			jQuery('.demo_changer').removeClass("active");
 		});						
 	}
-	
 });
+
+

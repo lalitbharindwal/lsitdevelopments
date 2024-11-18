@@ -1040,36 +1040,8 @@ $(function () {
   }); // This template is mobile first so active menu in navbar
   // has submenu displayed by default but not in desktop
   // so the code below will hide the active menu if it's in desktop
-  // ______________Full screen
 
-  $(document).on("click", ".fullscreen-button", function toggleFullScreen() {
-    $('html').addClass('fullscreen-button');
-
-    if (document.fullScreenElement !== undefined && document.fullScreenElement === null || document.msFullscreenElement !== undefined && document.msFullscreenElement === null || document.mozFullScreen !== undefined && !document.mozFullScreen || document.webkitIsFullScreen !== undefined && !document.webkitIsFullScreen) {
-      if (document.documentElement.requestFullScreen) {
-        document.documentElement.requestFullScreen();
-      } else if (document.documentElement.mozRequestFullScreen) {
-        document.documentElement.mozRequestFullScreen();
-      } else if (document.documentElement.webkitRequestFullScreen) {
-        document.documentElement.webkitRequestFullScreen(Element.ALLOW_KEYBOARD_INPUT);
-      } else if (document.documentElement.msRequestFullscreen) {
-        document.documentElement.msRequestFullscreen();
-      }
-    } else {
-      $('html').removeClass('fullscreen-button');
-
-      if (document.cancelFullScreen) {
-        document.cancelFullScreen();
-      } else if (document.mozCancelFullScreen) {
-        document.mozCancelFullScreen();
-      } else if (document.webkitCancelFullScreen) {
-        document.webkitCancelFullScreen();
-      } else if (document.msExitFullscreen) {
-        document.msExitFullscreen();
-      }
-    }
-  }); // ______________Cover Image
-
+  // ______________Cover Image
   $(".cover-image").each(function () {
     var attr = $(this).attr('data-image-src');
 
@@ -1974,7 +1946,7 @@ $(function () {
       $('body').removeClass('hover-submenu1');
       $('body').removeClass('icontext-menu');
       $('body').removeClass('sideicon-menu');
-      localStorage.setItem("horizantal", "True");
+      localStorage.setItem("horizontal", "True");
       document.querySelector('.horizontal .side-menu').style.flexWrap = 'noWrap';
       menuClick();
       checkHoriMenu();
