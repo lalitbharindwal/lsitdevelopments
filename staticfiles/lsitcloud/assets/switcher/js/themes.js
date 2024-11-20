@@ -232,8 +232,6 @@ function getCSRFToken() {
 }
 
 const decodedData = JSON.parse(default_theme.replace(/&quot;/g, '"')); // Replace &quot; with "
-localStorage.clear();
-sessionStorage.clear();
 Object.entries(decodedData).forEach(([key, value]) => {
     if(key == "primaryColor" || key == "primaryBorderColor" || key == "primaryHoverColor" || key == "primaryTransparent" || key == "darkPrimary" || key == "darkprimaryTransparent" || key == "transparentPrimary" || key == "transparentprimaryTransparent" || key == "transparentBgImgPrimary" || key == "transparentBgImgprimaryTransparent" || key == "transparentBgColor" || key == "transparentThemeColor"){
         localStorage.setItem(key, value !== null ? value : "null");

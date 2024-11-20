@@ -1,0 +1,162 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<meta http-equiv="content-type" content="text/html;charset=UTF-8" />
+<head>
+		<meta charset="UTF-8">
+		<meta name='viewport' content='width=device-width, initial-scale=1.0, user-scalable=0'>
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="Description" content="LSIT Developments">
+		<meta name="Author" content="LSIT Developments">
+		<meta name="Keywords" content="LSIT Developments"/>
+
+		<!-- Title -->
+		<title>LSIT Developments</title>
+		<!-- FAVICON -->
+		<link rel="icon" href="{% static 'lsitcloud/assets/img/brand/favicon.png' %}" type="image/x-icon"/>
+		<!-- ICONS CSS -->
+		<link href="{% static 'lsitcloud/assets/plugins/icons/icons.css' %}" rel="stylesheet">
+		<!-- BOOTSTRAP CSS -->
+		<link href="{% static 'lsitcloud/assets/plugins/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet" />
+		<!-- RIGHT-SIDEMENU CSS -->
+		<link href="{% static 'lsitcloud/assets/plugins/sidebar/sidebar.css' %}" rel="stylesheet">
+		<!-- P-SCROLL BAR CSS -->
+		<link href="{% static 'lsitcloud/assets/plugins/perfect-scrollbar/p-scrollbar.css' %}" rel="stylesheet" />
+		<!-- INTERNAL Select2 css -->
+		<link href="{% static 'lsitcloud/assets/plugins/select2/css/select2.min.css' %}" rel="stylesheet" />
+		<!-- INTERNAL Data table css -->
+		<link href="{% static 'lsitcloud/assets/plugins/datatable/css/buttons.bootstrap5.min.css' %}"  rel="stylesheet">
+		<link href="{% static 'lsitcloud/assets/plugins/datatable/responsive.bootstrap5.css' %}" rel="stylesheet" />
+		<!-- STYLES CSS -->
+		<link href="{% static 'lsitcloud/assets/css/style.css' %}" rel="stylesheet">
+		<link href="{% static 'lsitcloud/assets/css/style-dark.css' %}" rel="stylesheet">
+		<link href="{% static 'lsitcloud/assets/css/style-transparent.css' %}" rel="stylesheet">
+		<!--Internal  TelephoneInput css-->
+		<link rel="stylesheet" href="{% static 'lsitcloud/assets/plugins/telephoneinput/telephoneinput.css' %}">
+		<!-- SKIN-MODES CSS -->
+		<link href="{% static 'lsitcloud/assets/css/skin-modes.css' %}" rel="stylesheet" />
+		<!-- ANIMATION CSS -->
+		<link href="{% static 'lsitcloud/assets/css/animate.css' %}" rel="stylesheet">
+		<!-- SWITCHER CSS -->
+		<link href="{% static 'lsitcloud/assets/switcher/css/switcher.css' %}" rel="stylesheet"/>
+		<link href="{% static 'lsitcloud/assets/switcher/demo.css' %}" rel="stylesheet"/>
+    </head>
+	<body class="ltr error-page1">
+        <div class="bg-primary">
+            <!-- Loader -->
+            <div id="global-loader">
+                <img src="assets/img/loader.svg" class="loader-img" alt="Loader">
+            </div>
+            <!-- /Loader -->
+            <div class="square-box">
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+            </div>
+            <div class="page" >
+            <div class="page-single">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-xl-7 col-lg-6 col-md-8 col-sm-8 col-xs-10 card-sigin-main py-45 justify-content-center mx-auto">
+                            <div class="card-sigin mt-5 mt-md-0">
+                                <!-- Demo content-->
+                                <div class="main-card-signin d-md-flex">
+                                    <div class="wd-100p">
+                                        <div class="">
+                                            <div class="main-signup-header">
+                                                <h2 class="text-dark">Get Started</h2>
+                                                <h6 class="font-weight-normal mb-4">Signup to LSIT Developments</h6>
+                                                <form action="#">
+													<div class="form-group">
+														<label>Fullname</label> <input class="form-control" placeholder="Enter your fullname" type="text">
+                                                    </div>
+                                                    <div class="row">
+														<div class="form-group col-xl-6">
+															<label>Email</label> <input class="form-control" placeholder="Enter your email" type="text">
+														</div>
+														<div class="form-group col-xl-6">
+															<label>Contact Number</label> <input class="form-control" type="text" id="mobile-number" value="+91" placeholder="e.g. +918530016511">
+														</div>
+														<div class="form-group col-xl-6">
+															<label>Password</label> <input class="form-control" placeholder="Enter your password" type="password">
+														</div>
+														<div class="form-group col-xl-6">
+															<label>Confirm Password</label> <input class="form-control" placeholder="Enter your confirm password" type="password">
+														</div>
+                                                    </div>
+													<a href="signin" class="btn btn-primary btn-block">Create Account</a>
+                                                    <!--<div class="mt-4 d-flex mx-auto text-center justify-content-center">
+                                                        <button class="btn btn-icon btn-facebook me-3" type="button">
+                                                            <span class="btn-inner--icon"> <i class="bx bxl-facebook tx-18 tx-prime"></i> </span>
+                                                        </button>
+                                                        <button class="btn btn-icon me-3" type="button">
+                                                            <span class="btn-inner--icon"> <i class="bx bxl-twitter tx-18 tx-prime"></i> </span>
+                                                        </button>
+                                                        <button class="btn btn-icon me-3" type="button">
+                                                            <span class="btn-inner--icon"> <i class="bx bxl-linkedin tx-18 tx-prime"></i> </span>
+                                                        </button>
+                                                        <button class="btn  btn-icon me-3" type="button">
+                                                            <span class="btn-inner--icon"> <i class="bx bxl-instagram tx-18 tx-prime"></i> </span>
+                                                        </button>
+                                                    </div>-->
+                                                </form>
+                                                <div class="main-signup-footer mt-3 text-center">
+                                                    <p>Already have an account? <a href="signin">Sign In</a></p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+    
+            </div>
+        </div>
+
+		<script>const default_theme = "{{ default_theme }}";</script>
+		<!-- JQUERY JS -->
+		<script src="{% static 'lsitcloud/assets/plugins/jquery/jquery.min.js' %}"></script>
+		<!-- BOOTSTRAP JS -->
+		<script src="{% static 'lsitcloud/assets/plugins/bootstrap/js/popper.min.js' %}"></script>
+		<script src="{% static 'lsitcloud/assets/plugins/bootstrap/js/bootstrap.min.js' %}"></script>
+		<!-- MOMENT JS -->
+		<script src="{% static 'lsitcloud/assets/plugins/moment/moment.js' %}"></script>
+		<!-- P-SCROLL JS -->
+		<script src="{% static 'lsitcloud/assets/plugins/perfect-scrollbar/perfect-scrollbar.min.js' %}"></script>
+		<!-- SIDEBAR JS -->
+		<script src="{% static 'lsitcloud/assets/plugins/side-menu/sidemenu.js' %}"></script>
+		<!-- STICKY JS -->
+		<script src="{% static 'lsitcloud/assets/js/sticky.js' %}"></script>
+		<!-- RIGHT-SIDEBAR JS -->
+		<script src="{% static 'lsitcloud/assets/plugins/sidebar/sidebar.js' %}"></script>
+		<script src="{% static 'lsitcloud/assets/plugins/sidebar/sidebar-custom.js' %}"></script>
+		<!-- EVA-ICONS JS -->
+		<script src="{% static 'lsitcloud/assets/plugins/eva-icons/eva-icons.min.js' %}"></script>
+		<!-- Internal TelephoneInput js-->
+		<script src="{% static 'lsitcloud/assets/plugins/telephoneinput/telephoneinput.js' %}"></script>
+		<script src="{% static 'lsitcloud/assets/plugins/telephoneinput/inttelephoneinput.js' %}"></script>
+		<!-- THEME-COLOR JS -->
+		<script src="{% static 'lsitcloud/assets/js/themecolor.js' %}"></script>
+		<!-- CUSTOM JS -->
+		<script src="{% static 'lsitcloud/assets/js/custom.js' %}"></script>
+		<!-- SWITCHER JS -->
+		<script src="{% static 'lsitcloud/assets/switcher/js/switcher.js' %}"></script>
+        <script src="{% static 'lsitcloud/assets/switcher/js/themes.js' %}"></script>
+    </body>
+</html>

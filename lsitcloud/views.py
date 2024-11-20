@@ -4,6 +4,14 @@ from django.http import JsonResponse
 from lsitcloud.models import Cache  # Replace `myapp` with your app name
 import json
 
+def signin(request):
+    default_theme = Cache.objects.get(title="default_theme")
+    return render(request, "lsitcloud/signin.html", {"default_theme": default_theme.theme})
+
+def signup(request):
+    default_theme = Cache.objects.get(title="default_theme")
+    return render(request, "lsitcloud/signup.html", {"default_theme": default_theme.theme})
+
 def admin(request):
     default_theme = Cache.objects.get(title="default_theme")
     return render(request, "lsitcloud/admin.html", {"default_theme": default_theme.theme})

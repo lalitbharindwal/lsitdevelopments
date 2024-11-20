@@ -231,6 +231,8 @@ function getCSRFToken() {
     return document.querySelector('[name=csrf-token]').getAttribute('content');
 }
 
+localStorage.clear();
+sessionStorage.clear();
 const decodedData = JSON.parse(default_theme.replace(/&quot;/g, '"')); // Replace &quot; with "
 Object.entries(decodedData).forEach(([key, value]) => {
     if(key == "primaryColor" || key == "primaryBorderColor" || key == "primaryHoverColor" || key == "primaryTransparent" || key == "darkPrimary" || key == "darkprimaryTransparent" || key == "transparentPrimary" || key == "transparentprimaryTransparent" || key == "transparentBgImgPrimary" || key == "transparentBgImgprimaryTransparent" || key == "transparentBgColor" || key == "transparentThemeColor"){
@@ -519,7 +521,7 @@ if(sessionStorage.getItem("layoutwidthstyle") == "layout-fullwidth"){
     checkHoriMenu();
     $('body').removeClass('layout-boxed');
 }
-
+console.log(sessionStorage.getItem("layoutwidthstyle"))
 if(sessionStorage.getItem("layoutwidthstyle") == "layout-boxed"){
     $('body').addClass('layout-boxed');
     checkHoriMenu();
