@@ -45,7 +45,7 @@
         <div class="bg-primary">
             <!-- Loader -->
             <div id="global-loader">
-                <img src="assets/img/loader.svg" class="loader-img" alt="Loader">
+                <img src="{% static 'lsitcloud/assets/img/loader.svg' %}" class="loader-img" alt="Loader">
             </div>
             <!-- /Loader -->
             <div class="square-box">
@@ -74,6 +74,7 @@
                                 <!-- Demo content-->
                                 <div class="main-card-signin d-md-flex">
                                     <div class="wd-100p">
+										<div class="d-flex mb-4 justify-content-center"><a href="index.html"><img src="{% static 'lsitcloud/assets/img/brand/logo-white.png' %}" class="main-logo desktop-dark" width="45" alt="logo"></a></div>
                                         <div class="">
                                             <div class="main-signup-header">
                                                 <h2 class="text-dark">Get Started</h2>
@@ -124,8 +125,6 @@
                     </div>
                 </div>
             </div>
-
-    
             </div>
         </div>
 
@@ -152,11 +151,9 @@
 		<script src="{% static 'lsitcloud/assets/plugins/telephoneinput/telephoneinput.js' %}"></script>
 		<script src="{% static 'lsitcloud/assets/plugins/telephoneinput/inttelephoneinput.js' %}"></script>
 		<!-- THEME-COLOR JS -->
+		<script src="{% static 'lsitcloud/assets/switcher/js/themes.js' %}"></script>
 		<script src="{% static 'lsitcloud/assets/js/themecolor.js' %}"></script>
 		<!-- CUSTOM JS -->
 		<script src="{% static 'lsitcloud/assets/js/custom.js' %}"></script>
-		<!-- SWITCHER JS -->
-		<script src="{% static 'lsitcloud/assets/switcher/js/switcher.js' %}"></script>
-        <script src="{% static 'lsitcloud/assets/switcher/js/themes.js' %}"></script>
     </body>
 </html>
