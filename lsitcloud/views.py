@@ -12,6 +12,10 @@ def signup(request):
     default_theme = Cache.objects.get(title="default_theme")
     return render(request, "lsitcloud/signup.html", {"default_theme": default_theme.theme})
 
+def dashboard(request):
+    default_theme = Cache.objects.get(title="default_theme")
+    return render(request, "lsitcloud/dashboard.html", {"default_theme": default_theme.theme})
+
 def admin(request):
     default_theme = Cache.objects.get(title="default_theme")
     return render(request, "lsitcloud/admin.html", {"default_theme": default_theme.theme})

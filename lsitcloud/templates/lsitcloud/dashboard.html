@@ -55,7 +55,7 @@
 					<div class=" main-container container-fluid">
 						<div class="main-header-left ">
 							<div class="responsive-logo">
-								<a href="admin" class="header-logo">
+								<a href="dashboard" class="header-logo">
 									<h3 class="mobile-logo logo-1 text-primary"><b>LSIT</b></h3>
 									<img src="{% static 'lsitcloud/assets/img/brand/logo-white.png' %}" class="mobile-logo dark-logo-1" width="50" alt="logo">
 								</a>
@@ -65,7 +65,7 @@
 								<a class="close-toggle" href="javascript:void(0);"><i class="header-icon fe fe-x"></i></a>
 							</div>
 							<div class="logo-horizontal">
-								<a href="admin" class="header-logo">
+								<a href="dashboard" class="header-logo">
 									<h3 class="mobile-logo logo-1 text-primary"><b>LSIT</b></h3>
 									<img src="{% static 'lsitcloud/assets/img/brand/logo-white.png' %}" class="mobile-logo dark-logo-1" width="50" alt="logo">
 								</a>
@@ -109,13 +109,14 @@
 											</form>
 										</li>
 										<li class="dropdown main-profile-menu nav nav-item nav-link ps-lg-2">
-											<a class="new nav-link profile-user d-flex" href="#" data-bs-toggle="dropdown"><img alt="" src="{% static 'lsitcloud/assets/img/brand/logo-white.png' %}" class=""></a>
+											<a class="nav-link" href="#" data-bs-toggle="dropdown">
+												<i class="fa fa-user-circle fs-2"></i>
+											</a>
 											<div class="dropdown-menu">
 												<div class="menu-header-content p-3 border-bottom">
 													<div class="d-flex wd-100p">
-														<div class="main-img-user"><img alt="" src="{% static 'lsitcloud/assets/img/brand/logo-white.png' %}" class=""></div>
 														<div class="ms-3 my-auto">
-															<h6 class="tx-15 font-weight-semibold mb-0">ADMIN</h6><span class="dropdown-title-text subtext op-6  tx-12">LSIT Developments</span>
+															<h6 class="tx-15 font-weight-semibold mb-0">Username</h6><span class="dropdown-title-text subtext op-6 tx-12">user@gmail.com</span>
 														</div>
 													</div>
 												</div>
@@ -139,7 +140,7 @@
 				<div class="sticky">
 					<aside class="app-sidebar">
 						<div class="main-sidebar-header active">
-							<a class="header-logo active" href="admin">
+							<a class="header-logo active" href="dashboard">
 								<h5 class="main-logo desktop-logo text-primary"><b>LSIT Developments</b></h5>
 								<img src="{% static 'lsitcloud/assets/img/brand/logo-white.png' %}" class="main-logo desktop-dark" width="50" alt="logo">
 								<img src="{% static 'lsitcloud/assets/img/brand/favicon.png' %}" class="main-logo mobile-logo" width="150" alt="logo">
@@ -154,14 +155,7 @@
 									<a class="side-menu__item" data-bs-toggle="slide" href="javascript:void(0);"><svg xmlns="http://www.w3.org/2000/svg"  class="side-menu__icon" width="24" height="24" viewBox="0 0 24 24"><path d="M3 13h1v7c0 1.103.897 2 2 2h12c1.103 0 2-.897 2-2v-7h1a1 1 0 0 0 .707-1.707l-9-9a.999.999 0 0 0-1.414 0l-9 9A1 1 0 0 0 3 13zm7 7v-5h4v5h-4zm2-15.586 6 6V15l.001 5H16v-5c0-1.103-.897-2-2-2h-4c-1.103 0-2 .897-2 2v5H6v-9.586l6-6z"/></svg><span class="side-menu__label">Dashboards</span><i class="angle fe fe-chevron-right"></i></a>
 									<ul class="slide-menu">
 										<li class="side-menu__label1"><a href="javascript:void(0);">Dashboards</a></li>
-										<li><a class="slide-item" href="admin">Dashboard</a></li>
-									</ul>
-								</li>
-								<li class="side-item side-item-category">SETTINGS</li>
-								<li class="slide">
-									<a class="side-menu__item" data-bs-toggle="slide" href="javascript:void(0);"><svg xmlns="http://www.w3.org/2000/svg"  class="side-menu__icon" width="24" height="24" viewBox="0 0 24 24"><path d="M10 3H4a1 1 0 0 0-1 1v6a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4a1 1 0 0 0-1-1zM9 9H5V5h4v4zm11 4h-6a1 1 0 0 0-1 1v6a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1v-6a1 1 0 0 0-1-1zm-1 6h-4v-4h4v4zM17 3c-2.206 0-4 1.794-4 4s1.794 4 4 4 4-1.794 4-4-1.794-4-4-4zm0 6c-1.103 0-2-.897-2-2s.897-2 2-2 2 .897 2 2-.897 2-2 2zM7 13c-2.206 0-4 1.794-4 4s1.794 4 4 4 4-1.794 4-4-1.794-4-4-4zm0 6c-1.103 0-2-.897-2-2s.897-2 2-2 2 .897 2 2-.897 2-2 2z"/></svg><span class="side-menu__label">Theme</span><i class="angle fe fe-chevron-right"></i></a>
-									<ul class="slide-menu">
-										<li><a class="slide-item" href="themes">Themes</a></li>
+										<li><a class="slide-item" href="dashboard">Dashboard</a></li>
 									</ul>
 								</li>
 							</ul>
