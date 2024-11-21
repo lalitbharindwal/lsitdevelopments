@@ -1550,7 +1550,6 @@
      $('body').removeClass('color-header');
      $('body').removeClass('light-header');
      $('body').removeClass('gradient-header');
-     $('body').addClass('scrollable-layout');
      document.querySelector('body').classList.add('transparent-theme');
      (_document$querySelect17 = document.querySelector('body')) === null || _document$querySelect17 === void 0 ? void 0 : _document$querySelect17.classList.remove('light-theme');
      (_document$querySelect18 = document.querySelector('body')) === null || _document$querySelect18 === void 0 ? void 0 : _document$querySelect18.classList.remove('dark-theme');
@@ -1575,7 +1574,6 @@
      $('body').removeClass('color-header');
      $('body').removeClass('light-header');
      $('body').removeClass('gradient-header');
-     $('body').addClass('scrollable-layout');
      document.querySelector('body').classList.add('transparent-theme');
      (_document$querySelect19 = document.querySelector('body')) === null || _document$querySelect19 === void 0 ? void 0 : _document$querySelect19.classList.remove('light-theme');
      (_document$querySelect20 = document.querySelector('body')) === null || _document$querySelect20 === void 0 ? void 0 : _document$querySelect20.classList.remove('dark-theme');
@@ -1600,7 +1598,6 @@
      $('body').removeClass('color-header');
      $('body').removeClass('light-header');
      $('body').removeClass('gradient-header');
-     $('body').addClass('scrollable-layout');
      document.querySelector('body').classList.add('transparent-theme');
      (_document$querySelect21 = document.querySelector('body')) === null || _document$querySelect21 === void 0 ? void 0 : _document$querySelect21.classList.remove('light-theme');
      (_document$querySelect22 = document.querySelector('body')) === null || _document$querySelect22 === void 0 ? void 0 : _document$querySelect22.classList.remove('dark-theme');
@@ -1625,7 +1622,6 @@
      $('body').removeClass('color-header');
      $('body').removeClass('light-header');
      $('body').removeClass('gradient-header');
-     $('body').addClass('scrollable-layout');
      document.querySelector('body').classList.add('transparent-theme');
      (_document$querySelect23 = document.querySelector('body')) === null || _document$querySelect23 === void 0 ? void 0 : _document$querySelect23.classList.remove('light-theme');
      (_document$querySelect24 = document.querySelector('body')) === null || _document$querySelect24 === void 0 ? void 0 : _document$querySelect24.classList.remove('dark-theme');

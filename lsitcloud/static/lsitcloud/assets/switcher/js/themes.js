@@ -42,6 +42,9 @@ function apply_theme(){
             theam.transparentThemeColor = localStorage.getItem("transparentThemeColor");
             theam.transparentprimaryTransparent = localStorage.getItem("transparentprimaryTransparent");
         }
+    }else{
+        theam.transparentBgImgPrimary = localStorage.getItem("transparentBgImgPrimary");
+        theam.transparentBgImgprimaryTransparent = localStorage.getItem("transparentBgImgprimaryTransparent");
     }
 
     const leftmenustyle1 = document.querySelector('input[name="onoffswitch2"]:checked');
@@ -222,8 +225,6 @@ function apply_theme(){
 function handleBgImageClick(imageId) {
     theam.themeStyle = "bg-img";
     theam.BgImage = imageId;
-    theam.transparentBgImgPrimary = localStorage.getItem("transparentBgImgPrimary");
-    theam.transparentBgImgprimaryTransparent = localStorage.getItem("transparentBgImgprimaryTransparent");
 }
 
 // Function to get the CSRF token from the meta tag
@@ -384,19 +385,6 @@ if(sessionStorage.getItem("BgImage") == "bg-img1 bg-img"){
     $('body').removeClass('bg-img2');
     $('body').removeClass('bg-img3');
     $('body').removeClass('bg-img4');
-    $('body').removeClass('light-menu');
-    $('body').removeClass('color-menu');
-    $('body').removeClass('gradient-menu');
-    $('body').removeClass('dark-menu');
-    $('body').removeClass('dark-header');
-    $('body').removeClass('color-header');
-    $('body').removeClass('light-header');
-    $('body').removeClass('gradient-header');
-    $('body').addClass('scrollable-layout');
-    document.querySelector('body').classList.add('transparent-theme');
-    $('#myonoffswitch2').prop('checked', false);
-    $('#myonoffswitch1').prop('checked', false);
-    $('#myonoffswitchTransparent').prop('checked', true);
 }
 
 if(sessionStorage.getItem("BgImage") == "bg-img2 bg-img"){
@@ -404,18 +392,6 @@ if(sessionStorage.getItem("BgImage") == "bg-img2 bg-img"){
     $('body').removeClass('bg-img1');
     $('body').removeClass('bg-img3');
     $('body').removeClass('bg-img4');
-    $('body').removeClass('light-menu');
-    $('body').removeClass('color-menu');
-    $('body').removeClass('gradient-menu');
-    $('body').removeClass('dark-menu');
-    $('body').removeClass('dark-header');
-    $('body').removeClass('color-header');
-    $('body').removeClass('light-header');
-    $('body').removeClass('gradient-header');
-    $('body').addClass('scrollable-layout');
-    $('#myonoffswitch2').prop('checked', false);
-    $('#myonoffswitch1').prop('checked', false);
-    $('#myonoffswitchTransparent').prop('checked', true);
 }
 
 if(sessionStorage.getItem("BgImage") == "bg-img3 bg-img"){
@@ -423,18 +399,6 @@ if(sessionStorage.getItem("BgImage") == "bg-img3 bg-img"){
     $('body').removeClass('bg-img1');
     $('body').removeClass('bg-img2');
     $('body').removeClass('bg-img4');
-    $('body').removeClass('light-menu');
-    $('body').removeClass('color-menu');
-    $('body').removeClass('gradient-menu');
-    $('body').removeClass('dark-menu');
-    $('body').removeClass('dark-header');
-    $('body').removeClass('color-header');
-    $('body').removeClass('light-header');
-    $('body').removeClass('gradient-header');
-    $('body').addClass('scrollable-layout');
-    $('#myonoffswitch2').prop('checked', false);
-    $('#myonoffswitch1').prop('checked', false);
-    $('#myonoffswitchTransparent').prop('checked', true);
 }
 
 if(sessionStorage.getItem("BgImage") == "bg-img4 bg-img"){
@@ -442,18 +406,6 @@ if(sessionStorage.getItem("BgImage") == "bg-img4 bg-img"){
     $('body').removeClass('bg-img1');
     $('body').removeClass('bg-img2');
     $('body').removeClass('bg-img3');
-    $('body').removeClass('light-menu');
-    $('body').removeClass('color-menu');
-    $('body').removeClass('gradient-menu');
-    $('body').removeClass('dark-menu');
-    $('body').removeClass('dark-header');
-    $('body').removeClass('color-header');
-    $('body').removeClass('light-header');
-    $('body').removeClass('gradient-header');
-    $('body').addClass('scrollable-layout');
-    $('#myonoffswitch2').prop('checked', false);
-    $('#myonoffswitch1').prop('checked', false);
-    $('#myonoffswitchTransparent').prop('checked', true);
 }
 
 //leftmenustyle
