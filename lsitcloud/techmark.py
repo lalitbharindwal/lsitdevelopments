@@ -6,7 +6,6 @@ from django.contrib.auth.hashers import check_password
 from lsitcloud.models import Cache  # Replace `myapp` with your app name
 import requests, json, random
 import boto3
-from botocore.exceptions import ClientError
 
 # Initialize DynamoDB resource
 session = boto3.Session(
@@ -17,9 +16,15 @@ session = boto3.Session(
 )
 dynamodb = session.resource('dynamodb', region_name='ap-south-1')  # Use your AWS region
 table = dynamodb.Table('lsit-developments')  # Replace with your DynamoDB table name
+default_theme = Cache.objects.get(title="default_theme")
+
+def dashboard(request):
+    if request.session.get('email'):
+        return render(request, "techmark/dashboard.html", {"default_theme": default_theme.theme, "email": request.session.get('email'), "fullname": request.session.get('fullname')})
+    else:
+        return render(request, "techmark/signin.html", {"default_theme": default_theme.theme})
 
 def login(request):
-    default_theme = Cache.objects.get(title="default_theme")
     if request.method == 'POST':
         email = request.POST.get('email')
         password = request.POST.get('password')
@@ -57,7 +62,13 @@ def login(request):
             # User not found in the database
             return render(request, "techmark/signin.html", {"default_theme": default_theme.theme, "message": "User Not Found"})
 
-def register(request):
+    else:
+        if request.session.get('email'):
+            return render(request, "techmark/dashboard.html", {"default_theme": default_theme.theme, "email": request.session.get('email'), "fullname": request.session.get('fullname')})
+        else:
+            return render(request, "techmark/signin.html", {"default_theme": default_theme.theme})
+
+def signup(request):
     if request.method == 'POST':
         # Get input from form
         user_fullname = request.POST.get('fullname')
@@ -97,6 +108,9 @@ def register(request):
             return JsonResponse({"success": True, "message": "OTP sent for verification."})
         else:
             return JsonResponse({"success": False, "message": "Failed to send OTP. Please try again later."})
+        
+    else:
+        return render(request, "techmark/signup.html", {"default_theme": default_theme.theme})
 
 def send_otp(payload):
     content = (
@@ -120,7 +134,6 @@ def send_otp(payload):
             data=json.dumps(data),
             headers={"Content-Type": "application/json"}
         )
-        
         # Return the response to the caller for further status check
         return response
     
@@ -165,9 +178,3 @@ def verifyOtp(request):
             return JsonResponse({"success": False, "message": "Incorrect OTP"})
 
     return JsonResponse({"success": False, "message": "Invalid request."})
-
-def logout(request):
-    # Clear all session data
-    request.session.flush()
-    default_theme = Cache.objects.get(title="default_theme")
-    return render(request, "techmark/signin.html", {"default_theme": default_theme.theme})

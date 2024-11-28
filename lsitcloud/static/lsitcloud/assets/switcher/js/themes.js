@@ -205,7 +205,7 @@ function apply_theme(){
         }
     }
 
-   fetch('save_theme', {
+   fetch('theme', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',

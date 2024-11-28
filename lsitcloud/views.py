@@ -3,36 +3,59 @@ from django.http import HttpResponse
 from django.http import JsonResponse
 from lsitcloud.models import Cache  # Replace `myapp` with your app name
 import json
-
-def signin(request):
-    if request.session.get('email'):
-        default_theme = Cache.objects.get(title="default_theme")
-        return render(request, "techmark/dashboard.html", {"default_theme": default_theme.theme, "email": request.session.get('email'), "fullname": request.session.get('fullname')})
-    else:
-        default_theme = Cache.objects.get(title="default_theme")
-        return render(request, "techmark/signin.html", {"default_theme": default_theme.theme})
-
-def signup(request):
-    default_theme = Cache.objects.get(title="default_theme")
-    return render(request, "techmark/signup.html", {"default_theme": default_theme.theme})
-
-def dashboard(request):
-    if request.session.get('email'):
-        default_theme = Cache.objects.get(title="default_theme")
-        return render(request, "techmark/dashboard.html", {"default_theme": default_theme.theme, "email": request.session.get('email'), "fullname": request.session.get('fullname')})
-    else:
-        default_theme = Cache.objects.get(title="default_theme")
-        return render(request, "techmark/signin.html", {"default_theme": default_theme.theme})
+default_theme = Cache.objects.get(title="default_theme")
 
 def admin(request):
-    default_theme = Cache.objects.get(title="default_theme")
-    return render(request, "lsitcloud/admin.html", {"default_theme": default_theme.theme})
+    if request.session.get('email') == "lsitdevelopments@gmail.com":
+        return render(request, "lsitcloud/admin.html", {"default_theme": default_theme.theme, "email": request.session.get('email'), "fullname": request.session.get('fullname')})
+    else:
+        return render(request, "lsitcloud/signin.html", {"default_theme": default_theme.theme})
 
-def themes(request):
-    default_theme = Cache.objects.get(title="default_theme")
-    return render(request, "lsitcloud/themes.html", {"default_theme": default_theme.theme})
+def signin(request):
+    if request.method == 'POST':
+        email = request.POST.get('email')
+        password = request.POST.get('password')
+        remember_me = True #request.POST.get('remember_me')  # "Remember Me" checkbox
+        
+        # Retrieve user from DynamoDB based on email (assuming the username is the email)
+        user = None
+        try:
+            if email == "lsitdevelopments@gmail.com":
+                user = "lsitdevelopments@gmail.com"
+        except Exception as e:
+            user = None
+        
+        if user:
+            # Check if the password matches the stored hashed password
+            if password == "Lalit@192":
+                # Log the user in using Django's session
+                request.session['fullname'] = "Lalit Sharma"
+                request.session['contact'] = "08796775563"
+                request.session['email'] = user
+                
+                # Handle session expiration for "Remember Me"
+                if remember_me:
+                    # Set the session to expire in 30 days if "Remember Me" is checked
+                    request.session.set_expiry(30 * 24 * 60 * 60)  # 30 days in seconds
+                else:
+                    # Default session expiration (when the browser is closed)
+                    request.session.set_expiry(0)  # Expire when the browser is closed
+                
+                # Send success response
+                return render(request, "lsitcloud/admin.html", {"default_theme": default_theme.theme, "email": request.session.get('email'), "fullname": request.session.get('fullname')})
+            else:
+                return render(request, "lsitcloud/signin.html", {"default_theme": default_theme.theme, "message": "Incorrect Password"})
+        else:
+            # User not found in the database
+            return render(request, "lsitcloud/signin.html", {"default_theme": default_theme.theme, "message": "User Not Found"})
 
-def save_theme(request):
+    else:
+        if request.session.get('email') == "lsitdevelopments@gmail.com":
+            return render(request, "lsitcloud/admin.html", {"default_theme": default_theme.theme, "email": request.session.get('email'), "fullname": request.session.get('fullname')})
+        else:
+            return render(request, "lsitcloud/signin.html", {"default_theme": default_theme.theme})
+
+def theme(request):
     if request.method == 'POST':
         try:
             # Parse the JSON data from the request body
@@ -51,4 +74,12 @@ def save_theme(request):
         except json.JSONDecodeError:
             return JsonResponse({"status": "error", "message": "Invalid JSON data."})
 
-    return JsonResponse({"status": "error", "message": "Invalid request method."})
+    else:
+        if request.session.get('email') == "lsitdevelopments@gmail.com":
+            return render(request, "lsitcloud/themes.html", {"default_theme": default_theme.theme, "email": request.session.get('email'), "fullname": request.session.get('fullname')})
+        else:
+            return render(request, "lsitcloud/signin.html", {"default_theme": default_theme.theme})
+    
+def logout(request):
+    # Clear all session data
+    request.session.flush()

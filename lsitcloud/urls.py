@@ -1,16 +1,14 @@
 from django.urls import path
-from . import views, auth
+from . import views, techmark
 
 urlpatterns = [
     path('', views.signin, name='signin'),  # Example route
-    path('signin', views.signin, name='signin'),  # Example route
-    path('login', auth.login, name='login'),
-    path('signup', views.signup, name='signup'),  # Example route
-    path('register', auth.register, name='register'),  # Example route
-    path('verifyotp', auth.verifyOtp, name='verifyotp'),  # Example route
-    path('logout', auth.logout, name='logout'),  # Example route
-    path('dashboard', views.dashboard, name='dashboard'),  # Example route
     path('admin', views.admin, name='admin'),  # Example route
-    path('themes', views.themes, name='themes'),  # Example route
-    path('save_theme', views.save_theme, name='save_theme'),
+    path('signin', views.signin, name='signin'),  # Example route
+    path('logout', views.logout, name='logout'),  # Example route
+    path('theme', views.theme, name='theme'),  # Example route
+    path('login', techmark.login, name='login'),
+    path('signup', techmark.signup, name='signup'),  # Example route
+    path('verifyotp', techmark.verifyOtp, name='verifyotp'),  # Example route
+    path('dashboard', techmark.dashboard, name='dashboard')  # Example route
 ]

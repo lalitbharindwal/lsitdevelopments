@@ -114,7 +114,7 @@
                                                     </div>-->
                                                 </form>
                                                 <div class="main-signup-footer mt-3 text-center">
-                                                    <p>Already have an account? <a href="signin">Sign In</a></p>
+                                                    <p>Already have an account? <a href="login">Sign In</a></p>
                                                 </div><hr>
 												<form id="otpForm" onsubmit="verifyotp(event)"></form><hr>
                                             </div>
@@ -128,11 +128,7 @@
             </div>
             </div>
         </div>
-		<script>
-			const registerUrl = "{% url 'register' %}";
-			const verifyOtpUrl = "{% url 'verifyotp' %}";
-			const default_theme = "{{ default_theme }}";
-		</script>
+		<script>const default_theme = "{{ default_theme }}";</script>
 		<!-- JQUERY JS -->
 		<script src="{% static 'lsitcloud/assets/plugins/jquery/jquery.min.js' %}"></script>
 		<!-- BOOTSTRAP JS -->

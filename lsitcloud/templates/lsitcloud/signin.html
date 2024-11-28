@@ -13,7 +13,7 @@
 		<!-- Title -->
 		<title>LSIT Developments</title>
 		<!-- FAVICON -->
-		<link rel="icon" href="{% static 'lsitcloud/assets/img/brand/favicon.png' %}" type="image/x-icon"/>
+		<link rel="icon" href="{% static 'lsitcloud/assets/img/brand/logo-white.png' %}" type="image/x-icon"/>
 		<!-- ICONS CSS -->
 		<link href="{% static 'lsitcloud/assets/plugins/icons/icons.css' %}" rel="stylesheet">
 		<!-- BOOTSTRAP CSS -->
@@ -74,7 +74,7 @@
                                         <div class="wd-100p">
                                             <div class="">
                                                 <div class="main-signup-header">
-                                                    <h3 class="font-weight-bold d-flex mb-4 justify-content-center">LOGIN</h3>
+                                                    <h2 class="font-weight-bold d-flex mb-4 justify-content-center">ADMIN LOGIN</h2>
                                                     <h6 class="font-weight-semibold d-flex mb-4 justify-content-center">Please Signin to continue.</h6>
                                                     <div class="panel panel-primary">
                                                     <div class=" tab-menu-heading mb-2 border-bottom-0">
@@ -88,7 +88,7 @@
                                                     <div class="panel-body tabs-menu-body border-0 p-3">
                                                         <div class="tab-content">
                                                             <div class="tab-pane active" id="tab5">
-                                                                <form id="loginForm" action="{% url 'login' %}" method="POST">
+                                                                <form id="loginForm" action="{% url 'signin' %}" method="POST">
                                                                     {% csrf_token %}
                                                                     <div class="form-group">
                                                                         <label>Email</label> <input class="form-control" name="email" id="email" placeholder="Enter your email" type="text">
@@ -136,8 +136,7 @@
                                                     </div>
                                                 </div>
                                                     <div class="main-signin-footer text-center mt-3">
-                                                        <p><a href="forgot.html" class="mb-3">Forgot password?</a></p>
-                                                        <p>Don't have an account? <a href="signup">Create an Account</a></p>
+                                                        <p><a href="admin" class="mb-3">LSIT Developments</a></p>
                                                     </div>
                                                 </div><hr>
                                             </div>

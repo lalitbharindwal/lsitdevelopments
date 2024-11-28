@@ -4,7 +4,7 @@ async function register(event) {
     const form = event.target;
     const formData = new FormData(form);
     try {
-        const response = await fetch(registerUrl, {
+        const response = await fetch('signup', {
             method: 'POST',
             body: formData,
             headers: {
@@ -41,7 +41,7 @@ async function verifyotp(event) {
     const form = event.target;
     const formData = new FormData(form);
     try {
-        const response = await fetch(verifyOtpUrl, {
+        const response = await fetch('verifyotp', {
             method: 'POST',
             body: formData,
             headers: {
@@ -69,7 +69,7 @@ async function verifyotp(event) {
 
 function logout(){
     // Send a POST request to the Django backend
-    fetch(logoutUrl, {
+    fetch('logout', {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
