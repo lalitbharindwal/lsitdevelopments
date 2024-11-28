@@ -5,16 +5,24 @@ from lsitcloud.models import Cache  # Replace `myapp` with your app name
 import json
 
 def signin(request):
-    default_theme = Cache.objects.get(title="default_theme")
-    return render(request, "lsitcloud/signin.html", {"default_theme": default_theme.theme})
+    if request.session.get('email'):
+        default_theme = Cache.objects.get(title="default_theme")
+        return render(request, "techmark/dashboard.html", {"default_theme": default_theme.theme, "email": request.session.get('email'), "fullname": request.session.get('fullname')})
+    else:
+        default_theme = Cache.objects.get(title="default_theme")
+        return render(request, "techmark/signin.html", {"default_theme": default_theme.theme})
 
 def signup(request):
     default_theme = Cache.objects.get(title="default_theme")
-    return render(request, "lsitcloud/signup.html", {"default_theme": default_theme.theme})
+    return render(request, "techmark/signup.html", {"default_theme": default_theme.theme})
 
 def dashboard(request):
-    default_theme = Cache.objects.get(title="default_theme")
-    return render(request, "lsitcloud/dashboard.html", {"default_theme": default_theme.theme})
+    if request.session.get('email'):
+        default_theme = Cache.objects.get(title="default_theme")
+        return render(request, "techmark/dashboard.html", {"default_theme": default_theme.theme, "email": request.session.get('email'), "fullname": request.session.get('fullname')})
+    else:
+        default_theme = Cache.objects.get(title="default_theme")
+        return render(request, "techmark/signin.html", {"default_theme": default_theme.theme})
 
 def admin(request):
     default_theme = Cache.objects.get(title="default_theme")

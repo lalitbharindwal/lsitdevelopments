@@ -20,6 +20,5 @@ from django.urls import path, include
 urlpatterns = [
     path('', include('lsitcloud.urls')),  # Include the app's URLs
     path('admin/', admin.site.urls),
-    path('lsitcloud/', include('lsitcloud.urls')),  # Include the app's URLs
-    path('techmark/', include('techmark.urls'))  # Include the app's URLs
+    path('lsitcloud/', include('lsitcloud.urls'))  # Include the app's URLs
 ]
