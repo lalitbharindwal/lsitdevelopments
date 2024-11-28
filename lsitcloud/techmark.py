@@ -22,7 +22,7 @@ def dashboard(request):
     if request.session.get('email'):
         return render(request, "techmark/dashboard.html", {"default_theme": default_theme.theme, "email": request.session.get('email'), "fullname": request.session.get('fullname')})
     else:
-        return render(request, "techmark/signin.html", {"default_theme": default_theme.theme})
+        return render(request, "techmark/login.html", {"default_theme": default_theme.theme})
 
 def login(request):
     if request.method == 'POST':
@@ -55,18 +55,18 @@ def login(request):
                     request.session.set_expiry(0)  # Expire when the browser is closed
                 
                 # Send success response
-                return render(request, "techmark/dashboard.html", {"default_theme": default_theme.theme, "email": request.session.get('email'), "fullname": request.session.get('fullname')})
+                return dashboard(request)
             else:
-                return render(request, "techmark/signin.html", {"default_theme": default_theme.theme, "message": "Incorrect Password"})
+                return render(request, "techmark/login.html", {"default_theme": default_theme.theme, "message": "Incorrect Password"})
         else:
             # User not found in the database
-            return render(request, "techmark/signin.html", {"default_theme": default_theme.theme, "message": "User Not Found"})
+            return render(request, "techmark/login.html", {"default_theme": default_theme.theme, "message": "User Not Found"})
 
     else:
         if request.session.get('email'):
             return render(request, "techmark/dashboard.html", {"default_theme": default_theme.theme, "email": request.session.get('email'), "fullname": request.session.get('fullname')})
         else:
-            return render(request, "techmark/signin.html", {"default_theme": default_theme.theme})
+            return render(request, "techmark/login.html", {"default_theme": default_theme.theme})
 
 def signup(request):
     if request.method == 'POST':
