@@ -7,9 +7,9 @@ default_theme = Cache.objects.get(title="default_theme")
 
 def admin(request):
     if request.session.get('email') == "lsitdevelopments@gmail.com":
-        return render(request, "lsitcloud/admin.html", {"default_theme": default_theme.theme, "email": request.session.get('email'), "fullname": request.session.get('fullname')})
+        return render(request, "myadmin/admin.html", {"default_theme": default_theme.theme, "email": request.session.get('email'), "fullname": request.session.get('fullname')})
     else:
-        return render(request, "lsitcloud/signin.html", {"default_theme": default_theme.theme})
+        return render(request, "myadmin/signin.html", {"default_theme": default_theme.theme})
 
 def signin(request):
     if request.method == 'POST':
@@ -42,18 +42,18 @@ def signin(request):
                     request.session.set_expiry(0)  # Expire when the browser is closed
                 
                 # Send success response
-                return render(request, "lsitcloud/admin.html", {"default_theme": default_theme.theme, "email": request.session.get('email'), "fullname": request.session.get('fullname')})
+                return render(request, "myadmin/admin.html", {"default_theme": default_theme.theme, "email": request.session.get('email'), "fullname": request.session.get('fullname')})
             else:
-                return render(request, "lsitcloud/signin.html", {"default_theme": default_theme.theme, "message": "Incorrect Password"})
+                return render(request, "myadmin/signin.html", {"default_theme": default_theme.theme, "message": "Incorrect Password"})
         else:
             # User not found in the database
-            return render(request, "lsitcloud/signin.html", {"default_theme": default_theme.theme, "message": "User Not Found"})
+            return render(request, "myadmin/signin.html", {"default_theme": default_theme.theme, "message": "User Not Found"})
 
     else:
         if request.session.get('email') == "lsitdevelopments@gmail.com":
-            return render(request, "lsitcloud/admin.html", {"default_theme": default_theme.theme, "email": request.session.get('email'), "fullname": request.session.get('fullname')})
+            return render(request, "myadmin/admin.html", {"default_theme": default_theme.theme, "email": request.session.get('email'), "fullname": request.session.get('fullname')})
         else:
-            return render(request, "lsitcloud/signin.html", {"default_theme": default_theme.theme})
+            return render(request, "myadmin/signin.html", {"default_theme": default_theme.theme})
 
 def theme(request):
     if request.method == 'POST':
@@ -76,9 +76,9 @@ def theme(request):
 
     else:
         if request.session.get('email') == "lsitdevelopments@gmail.com":
-            return render(request, "lsitcloud/themes.html", {"default_theme": default_theme.theme, "email": request.session.get('email'), "fullname": request.session.get('fullname')})
+            return render(request, "myadmin/themes.html", {"default_theme": default_theme.theme, "email": request.session.get('email'), "fullname": request.session.get('fullname')})
         else:
-            return render(request, "lsitcloud/signin.html", {"default_theme": default_theme.theme})
+            return render(request, "myadmin/signin.html", {"default_theme": default_theme.theme})
     
 def logout(request):
     # Clear all session data
