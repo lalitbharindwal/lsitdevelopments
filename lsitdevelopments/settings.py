@@ -10,9 +10,8 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 
-import os
 from pathlib import Path
-
+import os
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -21,12 +20,13 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-ql8h2wxq-^lqyhjet&e3fr$h2*$llk9a9pjj8b_k#2n5mzven1'
+SECRET_KEY = 'django-insecure-ehvln()r+o^y&(zub+v_ry01hv68+!^t3xr_nugsft02d@!4o*'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["*"]
+ALLOWED_HOSTS = []
+
 
 # Application definition
 
@@ -37,7 +37,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'lsitcloud'
+    'myadmin',
+    'techmark'
 ]
 
 MIDDLEWARE = [
@@ -55,7 +56,7 @@ ROOT_URLCONF = 'lsitdevelopments.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, 'templates')],
+        'DIRS': [],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -116,14 +117,16 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
-# URL to access static files
+# This tells Django where to look for static files during development.
 STATIC_URL = '/static/'
 
-# Directory where static files will be collected in production
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+# Optional: You can define where static files will be collected when you run collectstatic
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, "static"),  # Your project-level static folder
+]
 
-# Additional directories where static files can be found
-STATICFILES_DIRS = []
+# This is where the collected static files will be stored for production
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
