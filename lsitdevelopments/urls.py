@@ -21,5 +21,6 @@ urlpatterns = [
     path('', include('myadmin.urls')),  # Include the app's URLs
     path('admin/', admin.site.urls),
     path('myadmin/', include('myadmin.urls')),  # Include the app's URLs
+    path('lsitcloud/', include('lsitcloud.urls')),  # Include the app's URLs
     path('techmark/', include('techmark.urls'))  # Include the app's URLs
 ]

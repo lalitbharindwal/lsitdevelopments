@@ -11,9 +11,9 @@
 		<meta name="Keywords" content="LSIT Developments"/>
 
 		<!-- Title -->
-		<title>TechMark</title>
+		<title>LSIT Cloud</title>
         <!-- FAVICON -->
-		<link rel="icon" href="{% static 'lsitdevelopments/img/brand/favicon2.png' %}" type="image/x-icon"/>
+		<link rel="icon" href="{% static 'lsitdevelopments/img/brand/favicon.png' %}" type="image/x-icon"/>
 		<!-- ICONS CSS -->
 		<link href="{% static 'lsitdevelopments/plugins/icons/icons.css' %}" rel="stylesheet">
 		<!-- BOOTSTRAP CSS -->
@@ -53,11 +53,11 @@
                 <!-- main-header -->
 				<div class="main-header side-header sticky nav nav-item">
 					<div class=" main-container container-fluid">
-						<div class="main-header-left">
+						<div class="main-header-left ">
 							<div class="responsive-logo">
-								<a href="dashboard" class="header-logo">
-									<h3 class="mobile-logo logo-1 text-primary"><b>TECHMARK</b></h3>
-									<img src="{% static 'lsitdevelopments/img/brand/logo.png' %}" class="mobile-logo dark-logo-1" width="120" alt="logo">
+								<a href="home" class="header-logo">
+									<h3 class="mobile-logo logo-1 text-primary"><b>LSIT</b></h3>
+									<img src="{% static 'lsitdevelopments/img/brand/logo-white.png' %}" class="mobile-logo dark-logo-1" width="50" alt="logo">
 								</a>
 							</div>
 							<div class="app-sidebar__toggle" data-bs-toggle="sidebar">
@@ -65,9 +65,9 @@
 								<a class="close-toggle" href="javascript:void(0);"><i class="header-icon fe fe-x"></i></a>
 							</div>
 							<div class="logo-horizontal">
-								<a href="dashboard" class="header-logo">
-									<h3 class="mobile-logo logo-1 text-primary"><b>TECHMARK</b></h3>
-									<img src="{% static 'lsitdevelopments/img/brand/logo.png' %}" class="mobile-logo dark-logo-1" width="120" alt="logo">
+								<a href="home" class="header-logo">
+									<h3 class="mobile-logo logo-1 text-primary"><b>LSIT</b></h3>
+									<img src="{% static 'lsitdevelopments/img/brand/logo-white.png' %}" class="mobile-logo dark-logo-1" width="50" alt="logo">
 								</a>
 							</div>
 							<div class="main-header-center ms-4 d-sm-none d-md-none d-lg-block form-group">
@@ -109,14 +109,13 @@
 											</form>
 										</li>
 										<li class="dropdown main-profile-menu nav nav-item nav-link ps-lg-2">
-											<a class="nav-link" href="#" data-bs-toggle="dropdown">
-												<i class="fa fa-user-circle fs-2"></i>
-											</a>
+											<a class="new nav-link profile-user d-flex" href="#" data-bs-toggle="dropdown"><img alt="" src="{% static 'lsitdevelopments/img/brand/logo-white.png' %}" class=""></a>
 											<div class="dropdown-menu">
 												<div class="menu-header-content p-3 border-bottom">
 													<div class="d-flex wd-100p">
+														<div class="main-img-user"><img alt="" src="{% static 'lsitdevelopments/img/brand/logo-white.png' %}" class=""></div>
 														<div class="ms-3 my-auto">
-															<h6 class="tx-15 font-weight-semibold mb-0">{{ fullname }}</h6><span class="dropdown-title-text subtext op-6 tx-12">{{ email }}</span>
+															<h6 class="tx-15 font-weight-semibold mb-0">ADMIN</h6><span class="dropdown-title-text subtext op-6  tx-12">LSIT Developments</span>
 														</div>
 													</div>
 												</div>
@@ -125,7 +124,7 @@
 												<a class="dropdown-item" href="mail-read.html"><i class="far fa-envelope "></i>Inbox</a>
 												<a class="dropdown-item" href="mail.html"><i class="far fa-comment-dots"></i>Messages</a>
 												<a class="dropdown-item" href="mail-settings.html"><i class="far fa-sun"></i>  Settings</a>
-												<a class="dropdown-item" href="login" onclick="logout()"><i class="far fa-arrow-alt-circle-left"></i> Sign Out</a>
+												<a class="dropdown-item" href="signin" onclick="logout()"><i class="far fa-arrow-alt-circle-left"></i> Sign Out</a>
 											</div>
 										</li>
 									</ul>
@@ -140,11 +139,11 @@
 				<div class="sticky">
 					<aside class="app-sidebar">
 						<div class="main-sidebar-header active">
-							<a class="header-logo active" href="dashboard">
-								<h5 class="main-logo desktop-logo text-primary"><b>TECHMARK</b></h5>
-								<img src="{% static 'lsitdevelopments/img/brand/logo.png' %}" class="main-logo desktop-dark" alt="logo">
-								<img src="{% static 'lsitdevelopments/img/brand/favicon2.png' %}" class="main-logo mobile-logo" alt="logo">
-								<img src="{% static 'lsitdevelopments/img/brand/favicon2.png' %}" class="main-logo mobile-dark" alt="logo">
+							<a class="header-logo active" href="Home">
+								<h5 class="main-logo desktop-logo text-primary"><b>LSIT Developments</b></h5>
+								<img src="{% static 'lsitdevelopments/img/brand/logo-white.png' %}" class="main-logo desktop-dark" width="50" alt="logo">
+								<img src="{% static 'lsitdevelopments/img/brand/favicon.png' %}" class="main-logo mobile-logo" width="150" alt="logo">
+								<img src="{% static 'lsitdevelopments/img/brand/favicon.png' %}" class="main-logo mobile-dark" width="150" alt="logo">
 							</a>
 						</div>
 						<div class="main-sidemenu">
@@ -155,7 +154,7 @@
 									<a class="side-menu__item" data-bs-toggle="slide" href="javascript:void(0);"><svg xmlns="http://www.w3.org/2000/svg"  class="side-menu__icon" width="24" height="24" viewBox="0 0 24 24"><path d="M3 13h1v7c0 1.103.897 2 2 2h12c1.103 0 2-.897 2-2v-7h1a1 1 0 0 0 .707-1.707l-9-9a.999.999 0 0 0-1.414 0l-9 9A1 1 0 0 0 3 13zm7 7v-5h4v5h-4zm2-15.586 6 6V15l.001 5H16v-5c0-1.103-.897-2-2-2h-4c-1.103 0-2 .897-2 2v5H6v-9.586l6-6z"/></svg><span class="side-menu__label">Dashboard</span><i class="angle fe fe-chevron-right"></i></a>
 									<ul class="slide-menu">
 										<li class="side-menu__label1"><a href="javascript:void(0);">Dashboards</a></li>
-										<li><a class="slide-item" href="dashboard">Dashboard</a></li>
+										<li><a class="slide-item" href="home">Dashboard</a></li>
 									</ul>
 								</li>
 							</ul>
@@ -242,6 +241,6 @@
 		<script src="{% static 'lsitdevelopments/js/themecolor.js' %}"></script>
 		<!-- CUSTOM JS -->
 		<script src="{% static 'lsitdevelopments/js/custom.js' %}"></script>
-		<script src="{% static 'techmark/auth.js' %}"></script>
+		<script src="{% static 'myadmin/main.js' %}"></script>
     </body>
 </html>
