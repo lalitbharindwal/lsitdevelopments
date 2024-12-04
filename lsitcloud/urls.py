@@ -2,6 +2,7 @@ from django.urls import path
 from . import views
 
 urlpatterns = [
+    path('', views.login, name='login'),  # Example route
     path('home', views.home, name='home'),  # Example route
     path('login', views.login, name='login'),  # Example route
     path('signup', views.signup, name='signup'),  # Example route
