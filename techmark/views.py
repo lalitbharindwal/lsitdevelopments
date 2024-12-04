@@ -7,6 +7,9 @@ from django.contrib.auth.hashers import check_password
 def index(request):
     return render(request, "index.html")
 
+def addcampaign(request):
+    return render(request, "addcampaign.html")
+
 def techmarklogin(request):
     return render(request, "techmarklogin.html")
 

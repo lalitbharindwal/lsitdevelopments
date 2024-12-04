@@ -1,0 +1,454 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<meta http-equiv="content-type" content="text/html;charset=utf-8" />
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="keywords" content="LSIT Developments" />
+	<meta name="author" content="LSIT Developments" />
+	<meta name="robots" content="LSIT Developments" />
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="description" content="LSIT Developments" />
+	<meta property="og:title" content="LSIT Developments" />
+	<meta property="og:description" content="LSIT Developments" />
+	<meta property="og:image" content="../../../vora.dexignlab.com/node/social-image.png" />
+	<meta name="format-detection" content="telephone=no">
+	<!-- PAGE TITLE HERE -->
+	<title>TechMark Solutions</title>
+	<!-- Favicon icon -->
+	<link rel="icon" type="image/png" sizes="16x16" href="{% static 'techmark/images/logo.png' %}">
+	<link href="{% static 'techmark/vendor/jqvmap/css/jqvmap.min.css' %}" rel="stylesheet">
+	<link rel="stylesheet" href="{% static 'techmark/vendor/chartist/css/chartist.min.css' %}">
+	<!-- Vectormap -->
+	<link href="{% static 'techmark/vendor/bootstrap-select/dist/css/bootstrap-select.min.css' %}" rel="stylesheet">
+
+	<!-- Plugins css Ends-->
+	<link href="{% static 'techmark/css/style.css' %}" rel="stylesheet">
+</head>
+
+<body>
+	<!--****  Preloader start *******-->
+	<div id="preloader">
+		<div class="sk-three-bounce">
+			 <div class="sk-child sk-bounce1"></div>
+			 <div class="sk-child sk-bounce2"></div>
+			 <div class="sk-child sk-bounce3"></div>
+		</div>
+  </div>
+	<!--***** Preloader end *******-->
+
+	<div id="main-wrapper">
+		<!--**** Nav header start *******-->
+		<div class="nav-header">
+      <a href="index.html" class="brand-logo">
+        <div class="logo-abbr">
+          <svg version="1.0" xmlns="http://www.w3.org/2000/svg" width="160" height="60" viewBox="0 0 200 100" preserveAspectRatio="xMidYMid meet">
+            <g fill="none" stroke="none">
+              <!-- Blue "T" -->
+              <text x="-25" y="70" font-family="Arial, sans-serif" font-size="65" font-weight="bold" fill="#00a8ff">T</text>
+              <!-- Green "M" -->
+              <text x="10" y="70" font-family="Arial, sans-serif" font-size="65" font-weight="bold" fill="#4caf50">M</text>
+              <!-- Green underline -->
+            </g>
+          </svg>
+        </div>
+      </a>
+      <div class="nav-control">
+        <div class="hamburger">
+          <span class="line"></span><span class="line"></span><span class="line"></span>
+        </div>
+      </div>
+    </div>
+		<!--**** Nav header end  ********-->
+
+		<!--******** Header start **********-->
+    <div class="header">
+      <div class="header-content">
+        <nav class="navbar navbar-expand">
+          <div class="collapse navbar-collapse justify-content-between">
+            <div class="header-left">
+              <div class="dashboard_bar">Add Campaign</div>
+            </div>
+            <ul class="navbar-nav header-right">
+              <li class="nav-item">
+                <div class="input-group search-area d-lg-inline-flex d-none">
+                  <div class="input-group-append">
+                    <span class="input-group-text">
+                      <a href="javascript:void(0)">
+                        <i class="flaticon-381-search-2"></i>
+                      </a>
+                    </span>
+                  </div>
+                  <input type="text" class="form-control" placeholder="Search here...">
+                </div>
+              </li>
+              <li class="nav-item dropdown header-profile">
+                <a class="nav-link" href="javascript:void(0)" role="button" data-bs-toggle="dropdown">
+                  <img src="{% static 'techmark/images/profile/17.jpg' %}" width="20" alt="" />
+                  <div class="header-info">
+                    <span class="text-black">Lalit Sharma</span>
+                    <p class="fs-12 mb-0">user</p>
+                  </div>
+                </a>
+                <div class="dropdown-menu dropdown-menu-right">
+                  <a href="app-profile.html" class="dropdown-item ai-icon">
+                    <svg id="icon-user1" xmlns="http://www.w3.org/2000/svg" class="text-primary" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                      <circle cx="12" cy="7" r="4"></circle>
+                    </svg>
+                    <span class="ms-2">Profile </span>
+                  </a>
+                  <a class="dropdown-item ai-icon sidebar-right-trigger wave-effect wave-effect-x" data-bs-toggle="tooltip" data-placement="right" data-original-title="Change Layout" href="javascript:void(0);">
+                    <svg id="icon-inbox" xmlns="http://www.w3.org/2000/svg" class="text-success" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                      <polyline points="22,6 12,13 2,6"></polyline>
+                    </svg>
+                    <span class="ms-2">Theam </span>
+                  </a>
+                  <a href="techmarklogin" class="dropdown-item ai-icon">
+                    <svg id="icon-logout" xmlns="http://www.w3.org/2000/svg" class="text-danger" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+                      <polyline points="16 17 21 12 16 7"></polyline>
+                      <line x1="21" y1="12" x2="9" y2="12"></line>
+                    </svg>
+                    <span class="ms-2">Logout </span>
+                  </a>
+                </div>
+              </li>
+            </ul>
+          </div>
+        </nav>
+      </div>
+    </div>
+		<!--******* Header end *************-->
+
+		<!--******* Sidebar start **********-->
+    <div class="dlabnav">
+      <div class="dlabnav-scroll">
+        <ul class="metismenu" id="menu">
+          <li>
+            <a class="has-arrow ai-icon" href="javascript:void(0);" aria-expanded="false">
+              <i class="flaticon-381-networking"></i>
+              <span class="nav-text">Dashboard</span>
+            </a>
+            <ul aria-expanded="false">
+              <li>
+                <a href="index">Dashboard</a>
+              </li>
+            </ul>
+          </li>
+          <li>
+            <a class="has-arrow ai-icon" href="javascript:void(0);" aria-expanded="false">
+              <i class="fa fa-envelope-o"></i>
+              <span class="nav-text">Email</span>
+            </a>
+            <ul aria-expanded="false">
+              <li>
+                <a href="addcampaign">Add Campaign</a>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Container starts-->
+		<div class="content-body">
+      <div class="container-fluid">
+        <!-- row -->
+        <div class="row">
+          <div class="col-lg-12">
+            <div class="card">
+              <div class="card-body">
+                <div class="row">
+                  <div class="col-11 py-2">
+                    <h4>Email Campaign</h4>
+                  </div>
+                  <div class="col-1 px-0">
+                    <div class="dropdown">
+                      <i class="fa fa-bars fs-24" data-bs-toggle="dropdown"></i>
+                      <div class="dropdown-menu">
+                        <div id="ccdropdown"><a class="dropdown-item" href="javascript:void(0);" onclick="displaycc()">Cc</a></div>
+                        <div id="bccdropdown"><a class="dropdown-item" href="javascript:void(0);" onclick="displaybcc()">Bcc</a></div>
+                        <div id="replytodropdown"><a class="dropdown-item" href="javascript:void(0);" onclick="displayreplyto()">Reply to</a></div>
+                        <a class="dropdown-item" href="javascript:void(0);">Select Recipients</a>
+                      </div>
+                    </div>
+                  </div><hr>
+                  <div class="col-md-5 py-2">
+                    <div class="dropdown">
+                      <h4>From: </h4>
+                      <button type="button" class="btn btn-light dropdown-toggle" data-bs-toggle="dropdown">Select Sender</button>
+                      <div class="dropdown-menu">
+                        <a class="dropdown-item" href="javascript:void(0);" data-bs-toggle="modal" data-bs-target=".select-sender-model-xl">Manage Sender</a>
+                        <a class="dropdown-item" href="javascript:void(0);">Link 2</a>
+                        <a class="dropdown-item" href="javascript:void(0);">Link 3</a>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-md-5 py-2">
+                    <h4>To (Recipients): </h4>
+                    <button type="button" class="btn btn-light" data-bs-toggle="modal" data-bs-target=".select-recipient-model-lg">Select Recipients</button>
+                  </div>
+                  <div class="col-sm-12 py-2" id="cc"></div>
+                  <div class="col-sm-12" id="bcc"></div>
+                  <div class="col-sm-12" id="replyto"></div>
+                  <div class="col-sm-12 py-2">
+                    <h4>Subject: </h4>
+                    <input type="text" class="form-control bg-transparent" placeholder=" Subject:">
+                  </div>
+                  <div class="col-sm-12 py-3">
+                    <div style="margin:auto; padding:0px 0px 0px; max-width: 100%;">
+                      <link rel="stylesheet" href="{% static 'lsitdevelopments/editor/res/style.css' %}" />
+                      <link rel="stylesheet" href="{% static 'lsitdevelopments/editor/richtexteditor/rte_theme_default.css' %}" />
+                      <script type="text/javascript" src="{% static 'lsitdevelopments/editor/richtexteditor/rte.js' %}"></script>
+                      <script>RTE_DefaultConfig.url_base="{% static 'lsitdevelopments/editor/richtexteditor' %}"</script>
+                      <script type="text/javascript" src="{% static 'lsitdevelopments/editor/richtexteditor/plugins/all_plugins.js' %}"></script>
+                      <div id="div_editor1"></div>
+                      <div class="d-grid gap-2" style="margin-top:-26px; position: relative;">
+                        <button class="btn btn-light" type="button">SEND EMAILS</button>
+                      </div>
+                      <script>
+                          var editor1 = new RichTextEditor("#div_editor1");
+                      </script>
+                      <script src="{% static 'lsitdevelopments/editor/res/patch.js' %}"></script>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Container Ends-->
+
+    <!-- XLarge modal -->
+    <div class="modal fade select-sender-model-xl" tabindex="-1" role="dialog" aria-hidden="true">
+      <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h4 class="modal-title">Manage Sender</h4>
+            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+          </div>
+          <div class="modal-body">
+              <div class="card">
+                  <div class="card-body">
+                      <div class="row" style="text-align: center; min-height: 350px;">
+                          <div class="col-xl-3">
+                              <div class="nav flex-column nav-pills mb-3">
+                                  <a href="#v-pills-active-alias" data-bs-toggle="pill" class="nav-link active show">Active Alias</a>
+                                  <a href="#v-pills-domain-info" data-bs-toggle="pill" class="nav-link">Domain Info</a>
+                                  <a href="#v-pills-create-alias" data-bs-toggle="pill" class="nav-link">Create New Alias</a>
+                              </div>
+                          </div>
+                          <div class="col-xl-9">
+                              <div class="tab-content">
+                                  <div id="v-pills-active-alias" class="tab-pane fade active show">
+                                    <h5 class="modal-title" id="myLargeModalLabel">Active Aliases</h5>
+                                    <p>You have configured the following aliases</p><hr>
+                                    <table class="table table-sm table-nowrap" style="overflow: scroll;">
+                                      <thead>
+                                          <tr>
+                                              <th scope="col">Name</th>
+                                              <th scope="col">Sender</th>
+                                              <th scope="col">Useremail</th>
+                                              <th scope="col">Verified on</th>
+                                              <th scope="col">Status</th>
+                                          </tr>
+                                      </thead>
+                                      <tbody id="verifiedemailslist">
+                                        <tr>
+                                          <td data-label="Name">Name</td>
+                                          <td data-label="Sender">Sender</td>
+                                          <td data-label="Useremail">Useremail</td>
+                                          <td data-label="Verified on">Verified on</td>
+                                          <td data-label="Status">Status</td>
+                                        </tr>
+                                      </tbody>
+                                    </table>
+                                  </div>
+                                  <div id="v-pills-domain-info" class="tab-pane fade">
+                                    <h5 class="modal-title" id="myLargeModalLabel">Domain Info</h5>
+                                    <p>Active Domains Information</p><hr>
+                                    <div id="domaininfo">No Data Found</div>
+                                  </div>
+                                  <div id="v-pills-create-alias" class="tab-pane fade">
+                                    <h5 class="modal-title" id="myLargeModalLabel">Create New Alise</h5>
+                                    <p>Authenticate Your email to create new Alise</p><hr>
+                                    <form action="">
+                                        <input type="text" class="form-control" id="newemailname" placeholder="Name">
+                                        <input type="email" class="form-control" id="newemail" oninput="getEmail()" placeholder="Email" novalidate>
+                                        <input type="text" class="form-control" id="newaliasemail" placeholder="Alias Email" novalidate>
+                                        <input type="password" class="form-control" id="newemailpassword" placeholder="Password" novalidate>
+                                        <div class="d-grid gap-2" style="text-align:center;">
+                                          <button type="button" class="btn rounded-pill btn-primary">VERIFY</button>
+                                        </div>
+                                        <div class="row mb-3" id="domaininfolog"></div>
+                                    </form>
+                                  </div>
+                              </div>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn light" data-bs-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-primary">Validate</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Large modal -->
+    <div class="modal fade select-recipient-model-lg" tabindex="-1" role="dialog" aria-hidden="true">
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h4 class="modal-title">Select Recipients</h4>
+            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+          </div>
+          <div class="modal-body">
+            <div class="row">
+              <div class="col-xl-4" style="text-align: center;">
+                <button type="button" class="btn btn-rounded btn-primary" style="width: 5cm;">
+                  <span class="btn-icon-left text-info">
+                    <i class="fa fa-clone color-primary"></i>
+                </span>Copy/paste</button><br><br>
+                <!--<button type="button" class="btn btn-rounded btn-success" style="width: 5cm;">
+                  <span class="btn-icon-left text-success">
+                    <i class="fa fa-upload color-success"></i>
+                </span>Excel Sheet </button>-->
+              </div>
+              <div class="col-xl-8">
+                <div class="card" id="emailslist">
+                  <div class="card-header">
+                      <h6 class="card-title mb-0">Enter Emails</h6>
+                  </div><!-- end card header -->
+                  <div class="card-body">
+                      <textarea id="recipientemails" placeholder="Enter one email address per line"></textarea>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn light" data-bs-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-primary">Validate</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+		<!--****** Footer start *******-->
+		<div class="footer">
+      <div class="copyright">
+          <p>Copyright © Designed &amp; Developed by <a href="http://techmark.solutions/" target="_blank">Techmark Solutions</a> <span class="current-year">2025</span></p>
+      </div>
+    </div>
+		<!--***** Footer end ********-->
+	</div>
+    <!--**** Scripts ***********-->
+  <script src="{% static 'techmark/vendor/global/global.min.js' %}"></script>
+  <script src="{% static 'techmark/vendor/bootstrap-select/dist/js/bootstrap-select.min.js' %}"></script>
+  <!-- Chart piety plugin files -->
+  <script src="{% static 'techmark/vendor/peity/jquery.peity.min.js' %}"></script>
+  <script src="{% static 'techmark/vendor/jquery-nice-select/js/jquery.nice-select.min.js' %}"></script>
+  <script src="{% static 'techmark/js/custom.min.js' %}"></script>
+  <script src="{% static 'techmark/js/dlabnav-init.js' %}"></script>
+  <!-- Plugins JS Ends-->
+  <script src="{% static 'techmark/js/styleSwitcher.js' %}"></script>
+  <script src="{% static 'techmark/addcampaign.js' %}"></script>
+</body>
+</html>
+
+<style>
+  #div_editor1 {
+      border-color: white !important;
+      height: auto;
+      min-height: 12cm;
+  }
+
+  #recipientemails{
+      box-sizing: border-box;
+      border: 2px solid;
+      font-weight: bolder;
+      width: 100%; 
+      height: 8cm;
+  }
+
+  table {
+      border-collapse: collapse;
+      margin: 0;
+      padding: 0;
+      width: 100%;
+  }
+
+  table caption {
+      font-size: 1em;
+      margin: .5em 0 .75em;
+  }
+
+  table tr {
+      padding: .36em;
+  }
+
+  table th, table td {
+      padding: .625em;
+      text-align: left;
+  }
+
+  table th {
+      font-size: .85em;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+  }
+
+  @media screen and (max-width: 1200px) {
+      table {
+          border: 0;
+      }
+
+  table caption {
+      font-size: 1.3em;
+  }
+                        
+  table thead {
+      border: none;
+      clip: rect(0 0 0 0);
+      height: 1px;
+      margin: -1px;
+      overflow: hidden;
+      padding: 0;
+      position: absolute;
+      width: 1px;
+  }
+                        
+  table tr {
+      border-bottom: 3px solid #ddd;
+      display: block;
+      margin-bottom: .625em;
+  }
+                        
+  table td {
+      border-bottom: 1px solid #ddd;
+      display: block;
+      font-size: .8em;
+      text-align: right;
+  }
+                        
+  table td::before {
+      content: attr(data-label);
+      float: left;
+      font-weight: bold;
+      text-transform: uppercase;
+  }
+                        
+  table td:last-child {
+      border-bottom: 0;
+  }
+}
+</style>
