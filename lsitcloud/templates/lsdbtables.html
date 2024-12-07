@@ -22,6 +22,8 @@
 		<link href="{% static 'lsitdevelopments/plugins/sidebar/sidebar.css' %}" rel="stylesheet">
 		<!-- P-SCROLL BAR CSS -->
 		<link href="{% static 'lsitdevelopments/plugins/perfect-scrollbar/p-scrollbar.css' %}" rel="stylesheet" />
+		<!-- Data table css -->
+		<link href="{% static 'lsitdevelopments/plugins/datatable/css/dataTables.bootstrap5.css' %}" rel="stylesheet" />
 		<!-- INTERNAL Select2 css -->
 		<link href="{% static 'lsitdevelopments/plugins/select2/css/select2.min.css' %}" rel="stylesheet" />
 		<!-- INTERNAL Data table css -->
@@ -115,7 +117,7 @@
 													<div class="d-flex wd-100p">
 														<div class="main-img-user"><img alt="" src="{% static 'lsitdevelopments/img/brand/logo-white.png' %}" class=""></div>
 														<div class="ms-3 my-auto">
-															<h6 class="tx-15 font-weight-semibold mb-0">ADMIN</h6><span class="dropdown-title-text subtext op-6 tx-12">LSIT Developments</span>
+															<h6 class="tx-15 font-weight-semibold mb-0">ADMIN</h6><span class="dropdown-title-text subtext op-6  tx-12">LSIT Developments</span>
 														</div>
 													</div>
 												</div>
@@ -180,13 +182,56 @@
 				</div>
 				<!-- main-sidebar -->
 			</div>
+			
 			<!-- main-content -->
 			<div class="main-content app-content">
 				<!-- container -->
 				<div class="main-container container-fluid">
+					<!-- breadcrumb -->
+					<div class="breadcrumb-header justify-content-between">
+						<div class="left-content">
+						  <span class="main-content-title mg-b-0 mg-b-lg-1">LSDB</span>
+						</div>
+						<div class="justify-content-center mt-2">
+							<button type="button" class="btn btn-primary" data-bs-target="#modaldemo1" data-bs-toggle="modal">
+								<i class="fe fe-plus me-1"></i> Create Table
+							</button>
+						</div>
+					</div>
+					<!-- /breadcrumb -->
 
+					<div class="row row-sm">
+						<div class="col-lg-12">
+							<div class="card custom-card">
+								<div class="card-body">
+									<div>
+										<h6 class="main-content-label mb-1">Tables</h6>
+									</div>
+									<div class="table-responsive ">
+										 <table class="table table-bordered text-nowrap border-bottom" id="responsive-datatable">
+											<thead>
+												<tr>
+													<th class="wd-20p">Table Name</th>
+													<th class="wd-20p">Primary Key</th>
+													<th class="wd-10p">Items Count</th>
+													<th class="wd-15p">Table Size</th>
+													<th class="wd-25p">Created On</th>
+													<th class="wd-15p">Status</th>
+												</tr>
+											</thead>
+											<tbody id="tableslist">{{ table_data|safe }}</tbody>
+										</table>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<!-- End Row -->
 				</div>
+				<!-- Container closed -->
 			</div>
+			<!-- main-content closed -->
+
             <!-- Sidebar-right-->
 			<div class="sidebar sidebar-right sidebar-animate">
 				<div class="panel panel-primary card mb-0 box-shadow">
@@ -220,6 +265,54 @@
 				</div>
 			</div>
 			<!--/Sidebar-right-->
+
+			<!-- Basic modal -->
+			<div class="modal fade" id="modaldemo1">
+				<div class="modal-dialog" role="document">
+					<div class="modal-content modal-content-demo">
+						<div class="modal-header">
+							<h6 class="modal-title">Create Table</h6>
+							<button aria-label="Close" class="btn-close" data-bs-dismiss="modal" type="button">
+								<span aria-hidden="true">&times;</span>
+							</button>
+						</div>
+						<div class="modal-body">
+							<div class="card box-shadow-0">
+								<div class="card-header">
+									<h4 class="card-title mb-2">Table Details</h4>
+									<p class="mb-2">LSDB is a schemaless database that requires only a table name and a primary key when you create the table.</p>
+								</div>
+								<div class="card-body pt-0">
+									<form id="createTableForm">
+										<div class="form-group">
+											<label for="table_name" class="main-content-label">Table Name</label>
+											<p class="mb-2">This will be used to identify your table.</p>
+											<input type="text" class="form-control" id="table_name" name="table_name" placeholder="Enter name for table" required>
+											<p class="mb-2">Between 3 and 255 characters, containing only letters, numbers, underscores (_), hyphens (-), and periods (.).</p>
+										</div>
+										<div class="form-group">
+											<label for="primary_key" class="main-content-label">Primary Key</label>
+											<p class="mb-2">This will be used to retrieve items from your table.</p>
+											<input type="text" class="form-control" id="primary_key" name="primary_key" placeholder="Enter Primary key name" required>
+											<select class="form-control SlectBox" id="key_type" name="key_type">
+												<option value="S">String</option>
+												<option value="N">Number</option>
+												<option value="B">Binary</option>
+											</select>
+											<p class="mb-2">1 to 255 characters and case sensitive.</p>
+										</div>
+									</form>
+								</div>
+							</div>
+						</div>
+						<div class="modal-footer">
+							<button class="btn ripple btn-primary" type="button" id="submitCreateTable">Create Table</button>
+							<button class="btn ripple btn-secondary" data-bs-dismiss="modal" type="button">Close</button>
+						</div>
+					</div>
+				</div>
+			</div>
+			<!-- End Basic modal -->
             
             <!-- Footer opened -->
 			<div class="main-footer">
@@ -233,7 +326,9 @@
 
         <!-- BACK-TO-TOP -->
 		<a href="#top" id="back-to-top"><i class="las la-arrow-up"></i></a>
-		<script>const default_theme = "{{ default_theme }}";</script>
+		<script>
+		const default_theme = "{{ default_theme }}";
+		</script>
 		<!-- JQUERY JS -->
 		<script src="{% static 'lsitdevelopments/plugins/jquery/jquery.min.js' %}"></script>
 		<!-- BOOTSTRAP JS -->
@@ -245,6 +340,16 @@
 		<script src="{% static 'lsitdevelopments/plugins/perfect-scrollbar/perfect-scrollbar.min.js' %}"></script>
 		<!-- SIDEBAR JS -->
 		<script src="{% static 'lsitdevelopments/plugins/side-menu/sidemenu.js' %}"></script>
+		<!-- Internal Data tables -->
+		<script src="{% static 'lsitdevelopments/plugins/datatable/js/jquery.dataTables.min.js' %}"></script>
+		<script src="{% static 'lsitdevelopments/plugins/datatable/js/dataTables.bootstrap5.js' %}"></script>
+		<script src="{% static 'lsitdevelopments/plugins/datatable/dataTables.responsive.min.js' %}"></script>
+		<script src="{% static 'lsitdevelopments/plugins/datatable/js/dataTables.buttons.min.js' %}"></script>
+		<script src="{% static 'lsitdevelopments/plugins/datatable/js/buttons.bootstrap5.min.js' %}"></script>
+		<script src="{% static 'lsitdevelopments/plugins/datatable/responsive.bootstrap5.min.js' %}"></script>
+		<script src="{% static 'lsitdevelopments/js/table-data.js' %}"></script>
+		<!-- INTERNAL Select2 js -->
+		<script src="{% static 'lsitdevelopments/plugins/select2/js/select2.full.min.js' %}"></script>
 		<!-- STICKY JS -->
 		<script src="{% static 'lsitdevelopments/js/sticky.js' %}"></script>
 		<!-- RIGHT-SIDEBAR JS -->
@@ -258,5 +363,6 @@
 		<!-- CUSTOM JS -->
 		<script src="{% static 'lsitdevelopments/js/custom.js' %}"></script>
 		<script src="{% static 'lsitcloud/auth.js' %}"></script>
+		<script src="{% static 'lsitcloud/lsdb.js' %}"></script>
     </body>
 </html>

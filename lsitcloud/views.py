@@ -17,14 +17,14 @@ table = dynamodb.Table('lsit-developments')  # Replace with your DynamoDB table 
 
 # Create your views here.
 def home(request):
-    default_theme = Myadmin.objects.get(title="default_theme")
+    default_theme = Myadmin.objects.get(key="default_theme")
     if request.session.get('email'):
-        return render(request, "home.html", {"default_theme": default_theme.theme, "email": request.session.get('email'), "fullname": request.session.get('fullname')})
+        return render(request, "home.html", {"default_theme": default_theme.value, "email": request.session.get('email'), "fullname": request.session.get('fullname')})
     else:
-        return render(request, "login.html", {"default_theme": default_theme.theme})
+        return render(request, "login.html", {"default_theme": default_theme.value})
 
 def login(request):
-    default_theme = Myadmin.objects.get(title="default_theme")
+    default_theme = Myadmin.objects.get(key="default_theme")
     if request.method == 'POST':
         email = request.POST.get('email')
         password = request.POST.get('password')
@@ -57,19 +57,19 @@ def login(request):
                 # Send success response
                 return home(request)
             else:
-                return render(request, "login.html", {"default_theme": default_theme.theme, "message": "Incorrect Password"})
+                return render(request, "login.html", {"default_theme": default_theme.value, "message": "Incorrect Password"})
         else:
             # User not found in the database
-            return render(request, "login.html", {"default_theme": default_theme.theme, "message": "User Not Found"})
+            return render(request, "login.html", {"default_theme": default_theme.value, "message": "User Not Found"})
 
     else:
         if request.session.get('email'):
-            return render(request, "home.html", {"default_theme": default_theme.theme, "email": request.session.get('email'), "fullname": request.session.get('fullname')})
+            return render(request, "home.html", {"default_theme": default_theme.value, "email": request.session.get('email'), "fullname": request.session.get('fullname')})
         else:
-            return render(request, "login.html", {"default_theme": default_theme.theme})
+            return render(request, "login.html", {"default_theme": default_theme.value})
 
 def signup(request):
-    default_theme = Myadmin.objects.get(title="default_theme")
+    default_theme = Myadmin.objects.get(key="default_theme")
     if request.method == 'POST':
         # Get input from form
         user_fullname = request.POST.get('fullname')
@@ -111,7 +111,7 @@ def signup(request):
             return JsonResponse({"success": False, "message": "Failed to send OTP. Please try again later."})
         
     else:
-        return render(request, "signup.html", {"default_theme": default_theme.theme})
+        return render(request, "signup.html", {"default_theme": default_theme.value})
 
 def send_otp(payload):
     content = (
