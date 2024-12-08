@@ -22,15 +22,13 @@ def lsdbtables(request):
         for table_name in table_names:
             table_info = dynamodb.describe_table(TableName=table_name)
             table_details = table_info.get('Table', {})
-            
-            # Extract key schema
             key_schema = table_details.get('KeySchema', [])
             primary_key = ", ".join([f"{key['AttributeName']} ({key['KeyType']})" for key in key_schema])
 
             # Append table row
             table_rows += f"""
                 <tr>
-                    <td>{table_details.get('TableName', 'N/A')}</td>
+                    <td><a href="lsdbtabledetails?tablename={table_details.get('TableName', 'N/A')}">{table_details.get('TableName', 'N/A')}</a></td>
                     <td>{primary_key}</td>
                     <td>{table_details.get('ItemCount', 'N/A')}</td>
                     <td>{table_details.get('TableSizeBytes', 'N/A')} bytes</td>
@@ -73,3 +71,111 @@ def createtable(request):
             return JsonResponse({'success': True})
         except Exception as e:
             return JsonResponse({'success': False, 'error': str(e)})
+        
+
+def lsdbtabledetails(request):
+    default_theme = Myadmin.objects.get(key="default_theme")
+    if request.session.get('email'):
+        query = request.GET.get('tablename', '')
+        if not query:
+            return "Table name is required", 400
+
+        # Access DynamoDB
+        dynamodb = session.client('dynamodb', region_name='ap-south-1')
+        resource = session.resource('dynamodb', region_name='ap-south-1')
+        table = resource.Table(query)
+
+        # Describe the table to get the key schema
+        try:
+            table_info = dynamodb.describe_table(TableName=query)
+        except dynamodb.exceptions.ResourceNotFoundException:
+            return "Table not found", 404
+
+        table_details = table_info.get('Table', {})
+        key_schema = table_details.get('KeySchema', [])
+        
+        # Get primary key(s) in the format "AttributeName (KeyType)"
+        primary_keys = [key['AttributeName'] for key in key_schema]
+
+        # Perform the scan operation
+        response = table.scan()
+        items = response.get('Items', [])
+
+        if not items:
+            return "No data found in the table", 404
+
+        # Generate the headers, prioritizing primary keys first
+        headers = ''.join(f"<th class='wd-20p'>{key} (Primary Key)</th>" for key in primary_keys)
+        other_headers = ''.join(
+            f"<th class='wd-20p'>{header}</th>" for header in items[0].keys() if header not in primary_keys
+        )
+        headers += other_headers
+
+        # Generate the rows, ensuring primary keys appear first
+        rows = ''.join(
+            f"<tr>"
+            + ''.join(f"<td><a href='lsdbtableitems?tablename={query}&primarykey={key}&primarykeyvalue={item.get(key, '')}'>{item.get(key, '')}<a></td>" for key in primary_keys)
+            + ''.join(f"<td>{json_to_ul(item.get(header, ''))}</td>" for header in items[0].keys() if header not in primary_keys)
+            + f"</tr>"
+            for item in items
+        )
+
+        # Generate the final HTML table
+        final_html = f"""
+            <table class="table table-bordered text-nowrap border-bottom" id="responsive-datatable">
+                <thead>
+                    <tr>
+                        {headers}
+                    </tr>
+                </thead>
+                <tbody>
+                    {rows}
+                </tbody>
+            </table>
+        """
+        return render(request, "lsdbtabledetails.html", {"default_theme": default_theme.value, "email": request.session.get('email'), "fullname": request.session.get('fullname'), "tableitems": final_html})
+    else:
+        return render(request, "login.html", {"default_theme": default_theme.value})
+
+def lsdbtableitems(request):
+    default_theme = Myadmin.objects.get(key="default_theme")
+    if request.session.get('email'):
+        tablename = request.GET.get('tablename', '')
+        primarykey = request.GET.get('primarykey', '')
+        primarykeyvalue = request.GET.get('primarykeyvalue', '')
+        resource = session.resource('dynamodb', region_name='ap-south-1')
+        # Access the DynamoDB table
+        table = resource.Table(tablename)
+        # Get the item from DynamoDB using the primary key
+        response = table.get_item(Key={primarykey: primarykeyvalue})
+        item = response.get('Item')
+        return render(request, "lsdbtableitems.html", {"default_theme": default_theme.value, "email": request.session.get('email'), "fullname": request.session.get('fullname'), "schema": json.dumps(item)})
+    else:
+        return render(request, "login.html", {"default_theme": default_theme.value})
+
+def json_to_ul(data):
+    if isinstance(data, dict):
+        ul = '<ul id="tree1">'
+        for key, value in data.items():
+            ul += f'<li>'
+            ul += f'<span class="badge bg-light fs-6">{key}</span> : '
+            if isinstance(value, dict) or isinstance(value, list):
+                ul += json_to_ul(value)
+            else:
+                ul += f'<span class="badge bg-light fs-6">{value}</span>'
+            ul += '</li>'
+        ul += '</ul>'
+        return ul
+    elif isinstance(data, list):
+        ul = '<ul class="tree1">'
+        for item in data:
+            ul += f'<li>'
+            if isinstance(item, dict) or isinstance(item, list):
+                ul += json_to_ul(item)
+            else:
+                ul += f'{item}'
+            ul += '</li>'
+        ul += '</ul>'
+        return ul
+    else:
+        return str(data)

@@ -1,0 +1,77 @@
+.jse--output{
+	position: relative;
+	min-height: 100px;
+	padding: 0;
+    font-family: monospace;
+	margin-top: 10px;
+}
+
+.jse--output .jse--row{
+	position: relative;
+	display: block;
+	margin: 0px;
+	line-height: 30px;
+	margin-top: 10px;
+}
+
+
+.jse--output .jse--delete{
+	position: absolute;
+	right: 0;
+	top: 0;
+	width: 2em;
+	text-align: center;
+	font-size: 1.5em;
+	cursor: pointer;
+	margin-top: 10px;
+}
+
+.jse--output .jse--row.jse--add{
+	font-weight: bold;
+	height: 30px;
+}
+
+.jse--output .jse--row.jse--add .jse--plus{
+	font-size: 1em;
+	padding-left: 50px !important;
+	cursor: pointer;
+	border: none;
+	background-color: transparent;
+	margin-left: 10px;
+	padding: 0 !important;
+	width: 30px;
+	height: 30px;
+}
+
+.jse--output .jse--typeof{
+	font-weight: 200;
+	font-size: 0.9em;
+}
+
+.jse--output input{
+	border: none;
+	background-color: transparent;
+	margin: 0;
+	line-height: 30px;
+	height: 30px;
+	padding: 0 15px;
+}
+
+.jse--output input.jse--key{
+	font-weight: bold;
+}
+
+.jse--output input.jse--value{
+	font-style: italic;
+}
+
+.jse--output input[type=checkbox].jse--value__new{
+	position: absolute;
+}
+
+.jse--output .jse--row-object > .jse--row,
+.jse--output .jse--row--array > .jse--row{
+	padding-left: 15px;
+	margin-left: 15px;
+	border-left: 1px dotted #ccc;
+}
