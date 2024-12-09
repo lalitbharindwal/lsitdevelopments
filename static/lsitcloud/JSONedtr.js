@@ -30,7 +30,7 @@ function JSONedtr( data, outputElement, config = {} ){
 			} else {
 				if( typeof value == 'string' )
 					value = value.replace(/\"/g,"&quot;");
-				output += '<div class="jse--row" id="jse--row-' + JSONedtr.i + '"><input type="text" class="jse--key" data-level="' + lvl + '" value="' + key + '" disabled> : <span class="jse--typeof">(' + typeof value + ')</span><input type="text" oninput="updateitem(this)" id="value-'+ JSONedtr.i +'" class="jse--value" value="' + value + '" data-key="' + key + '"><div class="jse--delete">✖</div></div>';
+				output += '<div class="jse--row" id="jse--row-' + JSONedtr.i + '"><input type="text" oninput="updateitem(this)" id="key-'+ JSONedtr.i +'" class="jse--key" data-level="' + lvl + '" value="' + key + '"> : <span class="jse--typeof">(' + typeof value + ')</span><input type="text" oninput="updateitem(this)" id="value-'+ JSONedtr.i +'" class="jse--value" value="' + value + '" data-key="' + key + '"><div class="jse--delete">✖</div></div>';
 			}
 		})
 
@@ -212,7 +212,6 @@ $(document).ready(function () {
 $('#getJson').click(function () {
 	var finalJson = editor.getData();
 	$('#result').text(JSON.stringify(finalJson, null, 2));
-	console.log(finalJson)
 	lsdbputitems(finalJson)
 });
 });
@@ -233,9 +232,8 @@ async function lsdbputitems(finalJson){
 
         if (response.ok) {
             const data = await response.json(); // Await for JSON response
-            console.log("Response:", data);
             if (data.success) {
-                console.log("Operation successful");
+				location = `lsdbtabledetails?tablename=${tablename}`;
             } else {
                 console.error("Operation failed:", data);
             }
@@ -250,4 +248,8 @@ async function lsdbputitems(finalJson){
 
 function updateitem(data){
 	document.getElementById(data.id).value = document.getElementById(data.id).value;
+	if(data.id.split("-")[0] == "key"){
+		const element = document.getElementById("value-"+data.id.split("-")[1]);
+		element.setAttribute('data-key', document.getElementById(data.id).value);
+	}
 }
