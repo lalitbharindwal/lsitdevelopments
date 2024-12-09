@@ -149,9 +149,22 @@ def lsdbtableitems(request):
         # Get the item from DynamoDB using the primary key
         response = table.get_item(Key={primarykey: primarykeyvalue})
         item = response.get('Item')
-        return render(request, "lsdbtableitems.html", {"default_theme": default_theme.value, "email": request.session.get('email'), "fullname": request.session.get('fullname'), "schema": json.dumps(item)})
+        return render(request, "lsdbtableitems.html", {"default_theme": default_theme.value, "email": request.session.get('email'), "fullname": request.session.get('fullname'), "tablename": tablename,"schema": json.dumps(item)})
     else:
         return render(request, "login.html", {"default_theme": default_theme.value})
+    
+def lsdbputitems(request):
+    if request.method == 'POST':
+        try:
+            data = json.loads(request.body)
+            tablename = data.get('tablename', '')
+            tabledata = data.get('tabledata', '')
+            dynamodb = session.resource('dynamodb', region_name='ap-south-1')
+            table = dynamodb.Table(tablename)
+            table.put_item(Item=tabledata)
+            return JsonResponse({'success': True})
+        except Exception as e:
+            return JsonResponse({'success': False, 'error': str(e)})
 
 def json_to_ul(data):
     if isinstance(data, dict):

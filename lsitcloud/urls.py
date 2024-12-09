@@ -12,6 +12,7 @@ urlpatterns = [
     path('lsdbtabledetails', lsdb.lsdbtabledetails, name='lsdbtabledetails'),
     path('lsdbtableitems', lsdb.lsdbtableitems, name='lsdbtableitems'),
     path('createtable', lsdb.createtable, name='createtable'),
+    path('lsdbputitems', lsdb.lsdbputitems, name='lsdbputitems'),
     path('lsdbapi', lsdb.lsdbapi, name='lsdbapi'),
     path('ls3containers', ls3.ls3containers, name='ls3containers'),
     path('ls3api', ls3.ls3api, name='ls3api'),

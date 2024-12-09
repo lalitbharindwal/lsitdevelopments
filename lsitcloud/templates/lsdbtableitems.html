@@ -38,6 +38,8 @@
 	    <!-- SWITCHER CSS -->
 		<link href="{% static 'lsitdevelopments/switcher/css/switcher.css' %}" rel="stylesheet"/>
 		<link href="{% static 'lsitdevelopments/switcher/demo.css' %}" rel="stylesheet"/>
+		<!-- JQUERY JS -->
+		<script src="{% static 'lsitdevelopments/plugins/jquery/jquery.min.js' %}"></script>
         <script src="{% static 'lsitcloud/JSONedtr.js' %}"></script>
         <link href="{% static 'lsitcloud/JSONedtr.css' %}" rel="stylesheet"/>
 	</head>
@@ -201,7 +203,10 @@
 									<div>
 										<h6 class="main-content-label mb-1">Attributes</h6>
 									</div><hr>
-                                    <div id="output"></div>
+                                    <div id="output" class="container"></div>
+									<div class="modal-footer">
+										<button class="btn ripple btn-primary" type="button"id="getJson">Save</button>
+									</div>
 								</div>
 							</div>
 						</div>
@@ -258,9 +263,15 @@
 
         <!-- BACK-TO-TOP -->
 		<a href="#top" id="back-to-top"><i class="las la-arrow-up"></i></a>
-		<script>const default_theme = "{{ default_theme }}";</script>
-		<!-- JQUERY JS -->
-		<script src="{% static 'lsitdevelopments/plugins/jquery/jquery.min.js' %}"></script>
+		<script>
+		const default_theme = "{{ default_theme }}";
+		var data = "{{ schema }}";
+		// Output element selector where the JSON editor will be rendered
+		const outputElement = "#output";
+		// Initialize JSONedtr with sample data
+		const editor = new JSONedtr(data.replace(/&quot;/g, '"').replace(/&amp;/g, '&'), outputElement);
+		const tablename = "{{tablename}}"
+		</script>
 		<!-- BOOTSTRAP JS -->
 		<script src="{% static 'lsitdevelopments/plugins/bootstrap/js/popper.min.js' %}"></script>
 		<script src="{% static 'lsitdevelopments/plugins/bootstrap/js/bootstrap.min.js' %}"></script>
@@ -283,17 +294,5 @@
 		<!-- CUSTOM JS -->
 		<script src="{% static 'lsitdevelopments/js/custom.js' %}"></script>
 		<script src="{% static 'lsitcloud/auth.js' %}"></script>
-        <script>
-            
-            $(document).ready(function () {
-            var data = "{{ schema }}";
-            var editor = new JSONedtr(JSON.stringify(JSON.parse(data.replace(/&quot;/g, '"'))), '#output');
-            // Button to extract the JSON
-            $('#getJsonButton').click(function () {
-                var finalJson = editor.getData();
-                $('#result').text(JSON.stringify(finalJson, null, 2));
-            });
-            });
-        </script>
     </body>
 </html>

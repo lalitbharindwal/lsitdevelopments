@@ -24,13 +24,13 @@ function JSONedtr( data, outputElement, config = {} ){
 				if( Array.isArray( value ) )
 					type = 'array';
 
-				output += '<div class="jse--row jse--row--array" id="jse--row-' + JSONedtr.i + '"><input type="text" class="jse--key jse--array" data-level="' + lvl + '" value="' + key + '"> : <span class="jse--typeof">(' + type + ')</span>';
+				output += '<div class="jse--row jse--row--array" id="jse--row-' + JSONedtr.i + '"> <input type="text" oninput="updateitem(this)" id="object-'+ JSONedtr.i +'" class="jse--key jse--array" data-level="' + lvl + '" value="' + key + '"> : <span class="jse--typeof">(' + type + ')</span>';
 				output += JSONedtr.level( value, lvl+1 );
 				output += '<div class="jse--delete">✖</div></div>';
 			} else {
 				if( typeof value == 'string' )
 					value = value.replace(/\"/g,"&quot;");
-				output += '<div class="jse--row" id="jse--row-' + JSONedtr.i + '"><input type="text" class="jse--key" data-level="' + lvl + '" value="' + key + '"> : <span class="jse--typeof">(' + typeof value + ')</span><input type="text" class="jse--value" value="' + value + '" data-key="' + key + '"><div class="jse--delete">✖</div></div>';
+				output += '<div class="jse--row" id="jse--row-' + JSONedtr.i + '"><input type="text" class="jse--key" data-level="' + lvl + '" value="' + key + '" disabled> : <span class="jse--typeof">(' + typeof value + ')</span><input type="text" oninput="updateitem(this)" id="value-'+ JSONedtr.i +'" class="jse--value" value="' + value + '" data-key="' + key + '"><div class="jse--delete">✖</div></div>';
 			}
 		})
 
@@ -42,9 +42,8 @@ function JSONedtr( data, outputElement, config = {} ){
 	JSONedtr.getData = function( node = $( JSONedtr.outputElement + ' > .jse--row > input' ) ){
 		var result = {};
 		$.each( node, function() {
-
 			if( $(this).hasClass( 'jse--value' ) ) {
-				result[ $(this).data( 'key' ) ] = $(this).val();
+				result[ $(this).data('key') ] = $(this).val();
 			}
 
 			if( $(this).hasClass( 'jse--object' ) || $(this).hasClass( 'jse--array' ) ) {
@@ -52,7 +51,7 @@ function JSONedtr( data, outputElement, config = {} ){
 				result[ $(this).val( ) ] = JSONedtr.getData( $( selector ) );
 			}
 		});
-		console.log(result)
+
 		return result;
 	}
 
@@ -63,8 +62,9 @@ function JSONedtr( data, outputElement, config = {} ){
 	JSONedtr.addRowForm = function( plus ) {
 		var lvl = $( plus ).data('level');
 		var typeofHTML = '<select class="jse--typeof">'+
-							'<option value="text" selected="selected">Text, Number</option>'+
-							'<option value="object">Object, Array</option>'+
+							'<option value="string" selected="selected">String</option>'+
+							'<option value="number">Number</option>'+
+							'<option value="object">Object/Array/Map/Json</option>'+
 							'<option value="boolean">Boolean</option>'+
 						'</select>';
 
@@ -73,7 +73,11 @@ function JSONedtr( data, outputElement, config = {} ){
 
 		$( plus ).find( 'select.jse--typeof' ).change(function(){
 			switch ( $(this).val() ) {
-				case 'text':
+				case 'string':
+					$(this).parent().siblings( '.jse--value__new' ).replaceWith( '<input type="text" class="jse--value jse--value__new" value="">' );
+					$(this).parent().siblings( '.jse--value__new' ).focus();
+					break;
+				case 'number':
 					$(this).parent().siblings( '.jse--value__new' ).replaceWith( '<input type="text" class="jse--value jse--value__new" value="">' );
 					$(this).parent().siblings( '.jse--value__new' ).focus();
 					break;
@@ -89,6 +93,10 @@ function JSONedtr( data, outputElement, config = {} ){
 
 		$( '.jse--row.jse--add .jse--save' ).click(function( e ){
 			JSONedtr.addRow( e.currentTarget.parentElement )
+			const inputs = document.getElementsByClassName("jse--key");
+			for (let i = 0; i < inputs.length; i++) {
+				inputs[i].disabled = true;
+			}
 		})
 
 		$( '.jse--row.jse--add .jse--cancel' ).click(function( e ){
@@ -110,7 +118,10 @@ function JSONedtr( data, outputElement, config = {} ){
 		$( row ).find( 'span.jse--typeof' ).html('(' + typeOf +')');
 		var key = $( row ).find( '.jse--key' ).val()
 		switch ( typeOf ) {
-			case 'text':
+			case 'string':
+				$( row ).find( '.jse--value__new' ).data( 'key', key ).removeClass( 'jse--value__new' );
+				break;
+			case 'number':
 				$( row ).find( '.jse--value__new' ).data( 'key', key ).removeClass( 'jse--value__new' );
 				break;
 			case 'boolean':
@@ -194,3 +205,49 @@ function JSONedtr( data, outputElement, config = {} ){
 
 	return JSONedtr;
 };
+
+$(document).ready(function () {
+
+// Button to extract the JSON
+$('#getJson').click(function () {
+	var finalJson = editor.getData();
+	$('#result').text(JSON.stringify(finalJson, null, 2));
+	console.log(finalJson)
+	lsdbputitems(finalJson)
+});
+});
+
+async function lsdbputitems(finalJson){
+	try {
+        const response = await fetch('lsdbputitems', {
+            method: 'POST',
+            body: JSON.stringify({ // Use JSON.stringify for proper body format
+                "tablename": tablename,
+                "tabledata": finalJson
+            }),
+            headers: {
+                'Content-Type': 'application/json', // Specify JSON content
+                'X-CSRFToken': getCookie('csrftoken') // CSRF token for Django
+            }
+        });
+
+        if (response.ok) {
+            const data = await response.json(); // Await for JSON response
+            console.log("Response:", data);
+            if (data.success) {
+                console.log("Operation successful");
+            } else {
+                console.error("Operation failed:", data);
+            }
+        } else {
+            const errorData = await response.json(); // Await for error details
+            console.error("Server Error Response:", errorData);
+        }
+    } catch (error) {
+        console.error('Network Error:', error);
+    }
+}
+
+function updateitem(data){
+	document.getElementById(data.id).value = document.getElementById(data.id).value;
+}
