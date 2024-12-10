@@ -8,8 +8,8 @@ session = boto3.Session(
     aws_secret_access_key="ixYVq+GE4A6xxeWlcGxajyZ92mRe5M0LxNoq0fyq",
     region_name="ap-south-1"
 )
-#dynamodb = session.resource('dynamodb', region_name='ap-south-1')  # Use your AWS region
 dynamodb = session.client('dynamodb', region_name='ap-south-1')
+resource = session.resource('dynamodb', region_name='ap-south-1')
 
 def lsdbtables(request):
     default_theme = Myadmin.objects.get(key="default_theme")
@@ -55,8 +55,6 @@ def createtable(request):
             primary_key = data.get('primary_key', '').strip()
             key_type = data.get('key_type', '').strip()
 
-            # Validation logic here
-
             # Create the table with on-demand capacity mode
             dynamodb.create_table(
                 TableName=table_name,
@@ -71,7 +69,6 @@ def createtable(request):
             return JsonResponse({'success': True})
         except Exception as e:
             return JsonResponse({'success': False, 'error': str(e)})
-        
 
 def lsdbtabledetails(request):
     default_theme = Myadmin.objects.get(key="default_theme")
@@ -79,12 +76,7 @@ def lsdbtabledetails(request):
         query = request.GET.get('tablename', '')
         if not query:
             return "Table name is required", 400
-
-        # Access DynamoDB
-        dynamodb = session.client('dynamodb', region_name='ap-south-1')
-        resource = session.resource('dynamodb', region_name='ap-south-1')
         table = resource.Table(query)
-
         # Describe the table to get the key schema
         try:
             table_info = dynamodb.describe_table(TableName=query)
@@ -93,7 +85,6 @@ def lsdbtabledetails(request):
 
         table_details = table_info.get('Table', {})
         key_schema = table_details.get('KeySchema', [])
-        
         # Get primary key(s) in the format "AttributeName (KeyType)"
         primary_keys = [key['AttributeName'] for key in key_schema]
 
@@ -143,7 +134,6 @@ def lsdbtableitems(request):
         tablename = request.GET.get('tablename', '')
         primarykey = request.GET.get('primarykey', '')
         primarykeyvalue = request.GET.get('primarykeyvalue', '')
-        resource = session.resource('dynamodb', region_name='ap-south-1')
         # Access the DynamoDB table
         table = resource.Table(tablename)
         # Get the item from DynamoDB using the primary key
@@ -159,8 +149,7 @@ def lsdbputitems(request):
             data = json.loads(request.body)
             tablename = data.get('tablename', '')
             tabledata = data.get('tabledata', '')
-            dynamodb = session.resource('dynamodb', region_name='ap-south-1')
-            table = dynamodb.Table(tablename)
+            table = resource.Table(tablename)
             table.put_item(Item=tabledata)
             return JsonResponse({'success': True})
         except Exception as e:
