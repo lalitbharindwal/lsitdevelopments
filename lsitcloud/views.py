@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from myadmin.models import Myadmin
+from lsitcloud.models import lsitcloud
 from django.http import JsonResponse
 from django.contrib.auth.hashers import make_password
 from django.contrib.auth.hashers import check_password
@@ -40,12 +41,15 @@ def login(request):
         
         if user:
             # Check if the password matches the stored hashed password
-            if check_password(password, user['password']):
+            if check_password(password, user['userinfo']['password']):
                 # Log the user in using Django's session
-                request.session['fullname'] = user['fullname']
-                request.session['contact'] = user['contact']
-                request.session['email'] = user['email']
-                
+                request.session['fullname'] = user['userinfo']['fullname']
+                request.session['contact'] = user['userinfo']['contact']
+                request.session['email'] = user['userinfo']['email']
+                obj, created = lsitcloud.objects.get_or_create(
+                    key=user['userinfo']['email'],
+                    value=json.dumps(user)
+                )
                 # Handle session expiration for "Remember Me"
                 if remember_me:
                     # Set the session to expire in 30 days if "Remember Me" is checked
@@ -164,9 +168,13 @@ def verifyOtp(request):
             # Prepare the item to insert into DynamoDB
             item = {
                 'email': user_email,  # Assuming email is the primary key
-                'fullname': user_fullname,
-                'contact': user_contact,
-                'password': user_password,  # Save the hashed password
+                'userinfo': {
+                    'fullname': user_fullname,
+                    'email': user_email,
+                    'contact': user_contact,
+                    'password': user_password,  # Save the hashed password
+                },
+                'lsdb': {'lsdbtables':{}}
             }
             # Insert the data into DynamoDB
             response = table.put_item(Item=item)
@@ -182,5 +190,6 @@ def verifyOtp(request):
 
 def logout(request):
     # Clear all session data
+    lsitcloud.objects.filter(key=request.session.get('email')).delete()
     request.session.flush()
     return JsonResponse({"status": "success", "message": "Logout Successfully"})

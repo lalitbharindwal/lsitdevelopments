@@ -24,17 +24,17 @@ function JSONedtr( data, outputElement, config = {} ){
 				if( Array.isArray( value ) )
 					type = 'array';
 
-				output += '<div class="jse--row jse--row--array" id="jse--row-' + JSONedtr.i + '"> <input type="text" oninput="updateitem(this)" id="object-'+ JSONedtr.i +'" class="jse--key jse--array" data-level="' + lvl + '" value="' + key + '"> : <span class="jse--typeof">(' + type + ')</span>';
+				output += '<div class="jse--row jse--row--array" id="jse--row-' + JSONedtr.i + '"> <input type="text" oninput="updateitem(this)" id="object-'+ JSONedtr.i +'" class="jse--key jse--array" data-level="' + lvl + '" value="' + key + '"><span class="jse--typeof">(' + type + ')</span>';
 				output += JSONedtr.level( value, lvl+1 );
 				output += '<div class="jse--delete">✖</div></div>';
 			} else {
 				if( typeof value == 'string' )
 					value = value.replace(/\"/g,"&quot;");
-				output += '<div class="jse--row" id="jse--row-' + JSONedtr.i + '"><input type="text" oninput="updateitem(this)" id="key-'+ JSONedtr.i +'" class="jse--key" data-level="' + lvl + '" value="' + key + '"> : <span class="jse--typeof">(' + typeof value + ')</span><input type="text" oninput="updateitem(this)" id="value-'+ JSONedtr.i +'" class="jse--value" value="' + value + '" data-key="' + key + '"><div class="jse--delete">✖</div></div>';
+				output += '<div class="jse--row" id="jse--row-' + JSONedtr.i + '"><input type="text" oninput="updateitem(this)" id="key-'+ JSONedtr.i +'" class="jse--key" data-level="' + lvl + '" value="' + key + '"> <span class="jse--typeof">(' + typeof value + ')</span> <input type="text" oninput="updateitem(this)" id="value-'+ JSONedtr.i +'" class="jse--value" value="' + value + '" data-key="' + key + '"><div class="jse--delete">✖</div></div>';
 			}
 		})
 
-		output += '<div class="jse--row jse--add" data-level="' + lvl + '"><button class="jse--plus">✚</button></div>';
+		output += '<div class="jse--row jse--add" data-level="' + lvl + '"><span class="jse--plus">✚</span></div>';
 
 		return output;
 	}
@@ -63,7 +63,6 @@ function JSONedtr( data, outputElement, config = {} ){
 		var lvl = $( plus ).data('level');
 		var typeofHTML = '<select class="jse--typeof">'+
 							'<option value="string" selected="selected">String</option>'+
-							'<option value="number">Number</option>'+
 							'<option value="object">Object/Array/Map/Json</option>'+
 							'<option value="boolean">Boolean</option>'+
 						'</select>';
@@ -74,10 +73,6 @@ function JSONedtr( data, outputElement, config = {} ){
 		$( plus ).find( 'select.jse--typeof' ).change(function(){
 			switch ( $(this).val() ) {
 				case 'string':
-					$(this).parent().siblings( '.jse--value__new' ).replaceWith( '<input type="text" class="jse--value jse--value__new" value="">' );
-					$(this).parent().siblings( '.jse--value__new' ).focus();
-					break;
-				case 'number':
 					$(this).parent().siblings( '.jse--value__new' ).replaceWith( '<input type="text" class="jse--value jse--value__new" value="">' );
 					$(this).parent().siblings( '.jse--value__new' ).focus();
 					break;
@@ -93,15 +88,15 @@ function JSONedtr( data, outputElement, config = {} ){
 
 		$( '.jse--row.jse--add .jse--save' ).click(function( e ){
 			JSONedtr.addRow( e.currentTarget.parentElement )
-			const inputs = document.getElementsByClassName("jse--key");
+			/*const inputs = document.getElementsByClassName("jse--key");
 			for (let i = 0; i < inputs.length; i++) {
 				inputs[i].disabled = true;
-			}
+			}*/
 		})
 
 		$( '.jse--row.jse--add .jse--cancel' ).click(function( e ){
 			var x = e.currentTarget.parentElement
-			$( e.currentTarget.parentElement ).html('<button class="jse--plus">✚</button>');
+			$( e.currentTarget.parentElement ).html('<span class="jse--plus">✚</span>');
 			$( x ).find( '.jse--plus' ).click( function(e){
 				JSONedtr.addRowForm( e.currentTarget.parentElement );
 			});
@@ -121,9 +116,6 @@ function JSONedtr( data, outputElement, config = {} ){
 			case 'string':
 				$( row ).find( '.jse--value__new' ).data( 'key', key ).removeClass( 'jse--value__new' );
 				break;
-			case 'number':
-				$( row ).find( '.jse--value__new' ).data( 'key', key ).removeClass( 'jse--value__new' );
-				break;
 			case 'boolean':
 				if ($( row ).find( '.jse--value__new' ).is(':checked')) {
 					$( row ).find( '.jse--value__new' ).replaceWith( '<input type="text" class="jse--value" value="true" data-key="' + key + '">' );
@@ -133,7 +125,7 @@ function JSONedtr( data, outputElement, config = {} ){
 				break;
 			case 'object':
 				$( row ).find( '.jse--key' ).addClass( 'jse--object' );
-				$( row ).append( '<div class="xxx jse--row jse--add" data-level="' + (lvl + 1) + '"><button class="jse--plus">✚</button></div>' );
+				$( row ).append( '<div class="xxx jse--row jse--add" data-level="' + (lvl + 1) + '"><span class="jse--plus">✚</span></div>' );
 				$( row ).addClass( 'jse--row-object' );
 				break;
 		}
@@ -145,7 +137,7 @@ function JSONedtr( data, outputElement, config = {} ){
 		})
 
 		$( row ).children( '.jse--save, .jse--cancel' ).remove();
-		$( row ).after( '<div class="jse--row jse--add" data-level="' + lvl + '"><button class="jse--plus">✚</button></div>' );
+		$( row ).after( '<div class="jse--row jse--add" data-level="' + lvl + '"><span class="jse--plus">✚</span></div>' );
 		$( row ).parent().find( '.jse--row.jse--add .jse--plus' ).click( function(e){ JSONedtr.addRowForm( e.currentTarget.parentElement ) });
 
 		$( row ).find( 'input' ).on( 'change input', function( e ){

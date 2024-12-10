@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.http import JsonResponse
-from myadmin.models import Myadmin  # Replace `myapp` with your app name
+from myadmin.models import Myadmin
 import json
 
 # Create your views here.
@@ -61,9 +61,9 @@ def themes(request):
             # Parse the JSON data from the request body
             theme_data = json.loads(request.body)
             # Use `get_or_create` to fetch or create a cache entry
-            cache, created = Myadmin.objects.get_or_create(title='default_theme')
+            cache, created = Myadmin.objects.get_or_create(key='default_theme')
             # Update the theme field
-            cache.theme = json.dumps(theme_data)  # Serialize the JSON data as a string
+            cache.value = json.dumps(theme_data)  # Serialize the JSON data as a string
             cache.save()
             # Return appropriate response
             if created:

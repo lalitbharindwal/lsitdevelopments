@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from myadmin.models import Myadmin
+from lsitcloud.models import lsitcloud
 from django.http import JsonResponse
 import boto3, json
 # Initialize DynamoDB resource
@@ -54,9 +55,9 @@ def createtable(request):
             table_name = data.get('table_name', '').strip()
             primary_key = data.get('primary_key', '').strip()
             key_type = data.get('key_type', '').strip()
-
+            cache = lsitcloud.objects.get(key=request.session.get('email'))
             # Create the table with on-demand capacity mode
-            dynamodb.create_table(
+            response = dynamodb.create_table(
                 TableName=table_name,
                 KeySchema=[
                     {'AttributeName': primary_key, 'KeyType': 'HASH'}
@@ -66,6 +67,15 @@ def createtable(request):
                 ],
                 BillingMode='PAY_PER_REQUEST'  # Set on-demand billing mode
             )
+
+            cache = json.loads(cache.value)
+            cache["lsdb"]["lsdbtables"][response['TableDescription']['TableName']] = {
+                "tablename": response['TableDescription']['TableName'],
+                "primarykey": response['TableDescription']['KeySchema'][0]['AttributeName'],
+                "createdon": response['TableDescription']['CreationDateTime'].strftime("%Y-%m-%d %H:%M:%S")
+            }
+            table = resource.Table('lsit-developments')
+            table.put_item(Item=cache)
             return JsonResponse({'success': True})
         except Exception as e:
             return JsonResponse({'success': False, 'error': str(e)})
@@ -82,7 +92,7 @@ def lsdbtabledetails(request):
             table_info = dynamodb.describe_table(TableName=query)
         except dynamodb.exceptions.ResourceNotFoundException:
             return "Table not found", 404
-
+        
         table_details = table_info.get('Table', {})
         key_schema = table_details.get('KeySchema', [])
         # Get primary key(s) in the format "AttributeName (KeyType)"
@@ -90,10 +100,10 @@ def lsdbtabledetails(request):
 
         # Perform the scan operation
         response = table.scan()
-        items = response.get('Items', [])
+        items = response['Items']
 
         if not items:
-            return "No data found in the table", 404
+            return render(request, "lsdbtabledetails.html", {"default_theme": default_theme.value, "email": request.session.get('email'), "fullname": request.session.get('fullname'), "tableitems": '<table class="table table-bordered text-nowrap border-bottom" id="responsive-datatable"><thead><tr><th></th></tr></thead><tbody></tbody></table>'})
 
         # Generate the headers, prioritizing primary keys first
         headers = ''.join(f"<th class='wd-20p'>{key} (Primary Key)</th>" for key in primary_keys)
@@ -157,19 +167,19 @@ def lsdbputitems(request):
 
 def json_to_ul(data):
     if isinstance(data, dict):
-        ul = '<ul id="tree1">'
+        ul = '<ul>'
         for key, value in data.items():
             ul += f'<li>'
-            ul += f'<span class="badge bg-light fs-6">{key}</span> : '
+            ul += f'<span class="fs-8">{key}</span> : '
             if isinstance(value, dict) or isinstance(value, list):
                 ul += json_to_ul(value)
             else:
-                ul += f'<span class="badge bg-light fs-6">{value}</span>'
+                ul += f'<span class="fs-8">{value}</span>'
             ul += '</li>'
         ul += '</ul>'
         return ul
     elif isinstance(data, list):
-        ul = '<ul class="tree1">'
+        ul = '<ul>'
         for item in data:
             ul += f'<li>'
             if isinstance(item, dict) or isinstance(item, list):

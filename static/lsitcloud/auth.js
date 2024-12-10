@@ -53,7 +53,7 @@ async function verifyotp(event) {
             const data = await response.json();
             if(data["success"]){
                 document.getElementById("message").innerHTML = data["message"];
-                location = "dashboard";
+                location = "login";
             }else{
                 document.getElementById("message").innerHTML = data["message"];
             }
