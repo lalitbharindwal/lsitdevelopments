@@ -35,9 +35,9 @@
 	border: none;
 	margin: 0;
 	line-height: 30px;
-    max-width: 150px;
 	height: 35px;
 	padding: 0 15px;
+	border-radius: 20px;
 }
 
 .jse--typeof{

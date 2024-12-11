@@ -2,7 +2,9 @@ from django.shortcuts import render
 from myadmin.models import Myadmin
 from lsitcloud.models import lsitcloud
 from django.http import JsonResponse
-import boto3, json
+import simplejson as json
+from decimal import Decimal
+import boto3
 # Initialize DynamoDB resource
 session = boto3.Session(
     aws_access_key_id="AKIAZI2LE6EX5MT67CT5",
@@ -15,26 +17,23 @@ resource = session.resource('dynamodb', region_name='ap-south-1')
 def lsdbtables(request):
     default_theme = Myadmin.objects.get(key="default_theme")
     if request.session.get('email'):
-        # Fetch the list of table names
-        response = dynamodb.list_tables()
-        table_names = response.get('TableNames', [])
+        cache = json.loads(lsitcloud.objects.get(key=request.session.get('email')).value)
         # Build table rows with details
         table_rows = ""
-        for table_name in table_names:
+        for table_name in cache['lsdb']['lsdbtables'].keys():
             table_info = dynamodb.describe_table(TableName=table_name)
             table_details = table_info.get('Table', {})
-            key_schema = table_details.get('KeySchema', [])
-            primary_key = ", ".join([f"{key['AttributeName']} ({key['KeyType']})" for key in key_schema])
 
             # Append table row
             table_rows += f"""
                 <tr>
                     <td><a href="lsdbtabledetails?tablename={table_details.get('TableName', 'N/A')}">{table_details.get('TableName', 'N/A')}</a></td>
-                    <td>{primary_key}</td>
+                    <td>{cache['lsdb']['lsdbtables'][table_name]['primarykey']}</td>
                     <td>{table_details.get('ItemCount', 'N/A')}</td>
                     <td>{table_details.get('TableSizeBytes', 'N/A')} bytes</td>
-                    <td>{table_details.get('CreationDateTime', 'N/A')}</td>
+                    <td>{cache['lsdb']['lsdbtables'][table_name]['createdon']}</td>
                     <td>{table_details.get('TableStatus', 'N/A')}</td>
+                    <td><a href="lsdbtabledetails?tablename={table_details.get('TableName', 'N/A')}"><button class="btn btn-primary"><i class="fas fa-eye"></i></button></a> <button class="btn btn-danger"><i class="far fa-trash-alt"></i></button></td>
                 </tr>
             """
         return render(request, "lsdbtables.html", {"default_theme": default_theme.value, "email": request.session.get('email'), "fullname": request.session.get('fullname'), "table_data": table_rows})
@@ -68,14 +67,16 @@ def createtable(request):
                 BillingMode='PAY_PER_REQUEST'  # Set on-demand billing mode
             )
 
-            cache = json.loads(cache.value)
-            cache["lsdb"]["lsdbtables"][response['TableDescription']['TableName']] = {
+            items = json.loads(cache.value)
+            items["lsdb"]["lsdbtables"][response['TableDescription']['TableName']] = {
                 "tablename": response['TableDescription']['TableName'],
                 "primarykey": response['TableDescription']['KeySchema'][0]['AttributeName'],
                 "createdon": response['TableDescription']['CreationDateTime'].strftime("%Y-%m-%d %H:%M:%S")
             }
             table = resource.Table('lsit-developments')
-            table.put_item(Item=cache)
+            table.put_item(Item=items)
+            cache.value = json.dumps(items)
+            cache.save()
             return JsonResponse({'success': True})
         except Exception as e:
             return JsonResponse({'success': False, 'error': str(e)})
@@ -103,7 +104,7 @@ def lsdbtabledetails(request):
         items = response['Items']
 
         if not items:
-            return render(request, "lsdbtabledetails.html", {"default_theme": default_theme.value, "email": request.session.get('email'), "fullname": request.session.get('fullname'), "tableitems": '<table class="table table-bordered text-nowrap border-bottom" id="responsive-datatable"><thead><tr><th></th></tr></thead><tbody></tbody></table>'})
+            return render(request, "lsdbtabledetails.html", {"default_theme": default_theme.value, "email": request.session.get('email'), "fullname": request.session.get('fullname'), "tablename":  query, "tableitems": '<table class="table table-bordered text-nowrap border-bottom" id="responsive-datatable"><thead><tr><th></th></tr></thead><tbody></tbody></table>'})
 
         # Generate the headers, prioritizing primary keys first
         headers = ''.join(f"<th class='wd-20p'>{key} (Primary Key)</th>" for key in primary_keys)
@@ -115,7 +116,7 @@ def lsdbtabledetails(request):
         # Generate the rows, ensuring primary keys appear first
         rows = ''.join(
             f"<tr>"
-            + ''.join(f"<td><a href='lsdbtableitems?tablename={query}&primarykey={key}&primarykeyvalue={item.get(key, '')}'>{item.get(key, '')}<a></td>" for key in primary_keys)
+            + ''.join(f"<td><a href='lsdbtableitems?tablename={query}&primarykeyvalue={item.get(key, '')}'>{item.get(key, '')}<a></td>" for key in primary_keys)
             + ''.join(f"<td>{json_to_ul(item.get(header, ''))}</td>" for header in items[0].keys() if header not in primary_keys)
             + f"</tr>"
             for item in items
@@ -134,7 +135,7 @@ def lsdbtabledetails(request):
                 </tbody>
             </table>
         """
-        return render(request, "lsdbtabledetails.html", {"default_theme": default_theme.value, "email": request.session.get('email'), "fullname": request.session.get('fullname'), "tableitems": final_html})
+        return render(request, "lsdbtabledetails.html", {"default_theme": default_theme.value, "email": request.session.get('email'), "fullname": request.session.get('fullname'), "tablename":  query, "tableitems": final_html})
     else:
         return render(request, "login.html", {"default_theme": default_theme.value})
 
@@ -142,14 +143,20 @@ def lsdbtableitems(request):
     default_theme = Myadmin.objects.get(key="default_theme")
     if request.session.get('email'):
         tablename = request.GET.get('tablename', '')
-        primarykey = request.GET.get('primarykey', '')
+        cache = json.loads(lsitcloud.objects.get(key=request.session.get('email')).value)
+        primarykey = cache['lsdb']['lsdbtables'][tablename]['primarykey']
         primarykeyvalue = request.GET.get('primarykeyvalue', '')
-        # Access the DynamoDB table
-        table = resource.Table(tablename)
-        # Get the item from DynamoDB using the primary key
-        response = table.get_item(Key={primarykey: primarykeyvalue})
-        item = response.get('Item')
-        return render(request, "lsdbtableitems.html", {"default_theme": default_theme.value, "email": request.session.get('email'), "fullname": request.session.get('fullname'), "tablename": tablename,"schema": json.dumps(item)})
+        if(primarykeyvalue):
+            # Access the DynamoDB table
+            table = resource.Table(tablename)
+            # Get the item from DynamoDB using the primary key
+            response = table.get_item(Key={primarykey: primarykeyvalue})
+            item = response.get('Item')
+            return render(request, "lsdbtableitems.html", {"default_theme": default_theme.value, "email": request.session.get('email'), "fullname": request.session.get('fullname'), "tablename": tablename,"schema": json.dumps(item)})
+        else:
+            blankitem = {}
+            blankitem[primarykey] = ""
+            return render(request, "lsdbtableitems.html", {"default_theme": default_theme.value, "email": request.session.get('email'), "fullname": request.session.get('fullname'), "tablename": tablename,"schema": json.dumps(blankitem)})
     else:
         return render(request, "login.html", {"default_theme": default_theme.value})
     

@@ -46,10 +46,9 @@ def login(request):
                 request.session['fullname'] = user['userinfo']['fullname']
                 request.session['contact'] = user['userinfo']['contact']
                 request.session['email'] = user['userinfo']['email']
-                obj, created = lsitcloud.objects.get_or_create(
-                    key=user['userinfo']['email'],
-                    value=json.dumps(user)
-                )
+                obj, created = lsitcloud.objects.get_or_create(key=user['userinfo']['email'])
+                obj.value = json.dumps(user)
+                obj.save()
                 # Handle session expiration for "Remember Me"
                 if remember_me:
                     # Set the session to expire in 30 days if "Remember Me" is checked
@@ -190,6 +189,6 @@ def verifyOtp(request):
 
 def logout(request):
     # Clear all session data
-    lsitcloud.objects.filter(key=request.session.get('email')).delete()
+    #lsitcloud.objects.filter(key=request.session.get('email')).delete()
     request.session.flush()
     return JsonResponse({"status": "success", "message": "Logout Successfully"})
