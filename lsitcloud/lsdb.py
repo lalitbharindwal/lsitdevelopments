@@ -74,8 +74,8 @@ def lsdbcreatetable(request):
                 "primarykeytype": response['TableDescription']['AttributeDefinitions'][0]['AttributeType'],
                 "createdon": response['TableDescription']['CreationDateTime'].strftime("%Y-%m-%d %H:%M:%S")
             }
-            table = resource.Table('lsit-developments')
-            table.put_item(Item=items)
+
+            resource.Table('lsit-developments').put_item(Item=items)
             cache.value = json.dumps(items)
             cache.save()
             return JsonResponse({'success': True})
@@ -241,6 +241,7 @@ def lsdbdeletetable(request):
             dynamodb.delete_table(TableName=tablename)
             items = json.loads(cache.value)
             del items["lsdb"]["lsdbtables"][tablename]
+            resource.Table('lsit-developments').put_item(Item=items)
             cache.value = json.dumps(items)
             cache.save()
             return JsonResponse({'success': True})
