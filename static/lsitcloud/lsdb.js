@@ -1,11 +1,12 @@
-document.getElementById('submitCreateTable').addEventListener('click', function () {
+async function createTable() {
+    // Get form data
     const form = document.getElementById('createTableForm');
-    const tableName = form.table_name.value.trim();
-    const primaryKey = form.primary_key.value.trim();
-    const keyType = form.key_type.value;
+    const tablename = form.tablename.value.trim();
+    const primaryKey = form.primarykey.value.trim();
+    const keyType = form.keytype.value;
 
     // Validate form inputs
-    if (tableName.length < 3 || tableName.length > 255) {
+    if (tablename.length < 3 || tablename.length > 255) {
         alert("Table name must be between 3 and 255 characters.");
         return;
     }
@@ -15,32 +16,79 @@ document.getElementById('submitCreateTable').addEventListener('click', function 
     }
 
     // Make an AJAX request to the server
-    fetch('createtable', {
+    await fetch('lsdbcreatetable', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
             'X-CSRFToken': getCookie('csrftoken') // Include CSRF token for security
         },
         body: JSON.stringify({
-            table_name: tableName,
-            primary_key: primaryKey,
-            key_type: keyType
+            tablename: tablename,
+            primarykey: primaryKey,
+            keytype: keyType
         })
     }).then(response => response.json()).then(data => {
-            if (data.success) {
-                alert(`Table '${tableName}' created successfully!`);
-                // Optionally, close the modal
-                const modal = document.getElementById('modaldemo1');
-                const modalInstance = bootstrap.Modal.getInstance(modal);
-                modalInstance.hide();
-            } else {
-                alert(`Error: ${data.error}`);
-            }
-        }).catch(error => {
-            console.error('Error:', error);
-            alert('An error occurred while creating the table.');
-        });
-});
+        if (data.success) {
+            // Optionally, close the modal
+            const modal = document.getElementById('modaldemo1');
+            const modalInstance = bootstrap.Modal.getInstance(modal);
+            modalInstance.hide();
+            alert(`Table '${tablename}' created successfully!`);
+            location = "lsdbtables";
+        } else {
+            alert(`Error: ${data.error}`);
+        }
+    }).catch(error => {
+        console.error('Error:', error);
+        alert('An error occurred while creating the table.');
+    });
+}
+
+function deletetable(tablename){
+    fetch('lsdbdeletetable', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': getCookie('csrftoken') // Include CSRF token for security
+        },
+        body: JSON.stringify({
+            tablename: tablename
+        })
+    }).then(response => response.json()).then(data => {
+        if (data.success) {
+            alert(`Table '${tablename}' deleted successfully!`);
+            location = "lsdbtables"
+        } else {
+            alert(`Error: ${data.error}`);
+        }
+    }).catch(error => {
+        console.error('Error:', error);
+        alert('An error occurred while creating the table.');
+    });
+}
+
+function deleteattribute(tablename, key){
+    fetch('lsdbdeleteattribute', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': getCookie('csrftoken') // Include CSRF token for security
+        },
+        body: JSON.stringify({
+            tablename: tablename,
+            primarykeyvalue: key
+        })
+    }).then(response => response.json()).then(data => {
+        if (data.success) {
+            alert(`Table '${key}' deleted successfully!`);
+            location.reload();
+        } else {
+            alert(`Error: ${data.error}`);
+        }
+    }).catch(error => {
+        alert('An error occurred while creating the table.');
+    });
+}
 
 function getCookie(name) {
     let cookieValue = null;

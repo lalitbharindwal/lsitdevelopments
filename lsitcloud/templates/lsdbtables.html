@@ -269,39 +269,39 @@
 								<span aria-hidden="true">&times;</span>
 							</button>
 						</div>
-						<div class="modal-body">
-							<div class="card box-shadow-0">
-								<div class="card-header">
-									<h4 class="card-title mb-2">Table Details</h4>
-									<p class="mb-2">LSDB is a schemaless database that requires only a table name and a primary key when you create the table.</p>
-								</div>
-								<div class="card-body pt-0">
-									<form id="createTableForm">
+						<form id="createTableForm" onsubmit="createTable(); return false">
+							<div class="modal-body">
+								<div class="card box-shadow-0">
+									<div class="card-header">
+										<h4 class="card-title mb-2">Table Details</h4>
+										<p class="mb-2">LSDB is a schemaless database that requires only a table name and a primary key when you create the table.</p>
+									</div>
+									<div class="card-body pt-0">
 										<div class="form-group">
-											<label for="table_name" class="main-content-label">Table Name</label>
+											<label for="tablename" class="main-content-label">Table Name</label>
 											<p class="mb-2">This will be used to identify your table.</p>
-											<input type="text" class="form-control" id="table_name" name="table_name" placeholder="Enter name for table" required>
+											<input type="text" class="form-control" id="tablename" name="tablename" placeholder="Enter name for table" required>
 											<p class="mb-2">Between 3 and 255 characters, containing only letters, numbers, underscores (_), hyphens (-), and periods (.).</p>
 										</div>
 										<div class="form-group">
-											<label for="primary_key" class="main-content-label">Primary Key</label>
+											<label for="primarykey" class="main-content-label">Primary Key</label>
 											<p class="mb-2">This will be used to retrieve items from your table.</p>
-											<input type="text" class="form-control" id="primary_key" name="primary_key" placeholder="Enter Primary key name" required>
-											<select class="form-control SlectBox" id="key_type" name="key_type">
+											<input type="text" class="form-control" id="primarykey" name="primarykey" placeholder="Enter Primary key name" required>
+											<select class="form-control SlectBox" id="keytype" name="keytype" required>
 												<option value="S">String</option>
 												<option value="N">Number</option>
 												<option value="B">Binary</option>
 											</select>
 											<p class="mb-2">1 to 255 characters and case sensitive.</p>
 										</div>
-									</form>
+									</div>
 								</div>
 							</div>
-						</div>
-						<div class="modal-footer">
-							<button class="btn ripple btn-primary" type="button" id="submitCreateTable">Create Table</button>
-							<button class="btn ripple btn-secondary" data-bs-dismiss="modal" type="button">Close</button>
-						</div>
+							<div class="modal-footer">
+								<button class="btn ripple btn-primary" type="submit">Create Table</button>
+								<button class="btn ripple btn-secondary" data-bs-dismiss="modal" type="button">Close</button>
+							</div>
+						</form>
 					</div>
 				</div>
 			</div>

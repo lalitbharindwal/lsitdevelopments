@@ -33,7 +33,7 @@ def lsdbtables(request):
                     <td>{table_details.get('TableSizeBytes', 'N/A')} bytes</td>
                     <td>{cache['lsdb']['lsdbtables'][table_name]['createdon']}</td>
                     <td>{table_details.get('TableStatus', 'N/A')}</td>
-                    <td><a href="lsdbtabledetails?tablename={table_details.get('TableName', 'N/A')}"><button class="btn btn-primary"><i class="fas fa-eye"></i></button></a> <button class="btn btn-danger"><i class="far fa-trash-alt"></i></button></td>
+                    <td><a href="lsdbtabledetails?tablename={table_details.get('TableName', 'N/A')}"><button class="btn btn-primary"><i class="fas fa-eye"></i></button></a> <button class="btn btn-danger" onclick="deletetable('{table_details.get('TableName', 'N/A')}')"><i class="far fa-trash-alt"></i></button></td>
                 </tr>
             """
         return render(request, "lsdbtables.html", {"default_theme": default_theme.value, "email": request.session.get('email'), "fullname": request.session.get('fullname'), "table_data": table_rows})
@@ -47,22 +47,22 @@ def lsdbapi(request):
     else:
         return render(request, "login.html", {"default_theme": default_theme.value})
     
-def createtable(request):
+def lsdbcreatetable(request):
     if request.method == 'POST':
         try:
             data = json.loads(request.body)
-            table_name = data.get('table_name', '').strip()
-            primary_key = data.get('primary_key', '').strip()
-            key_type = data.get('key_type', '').strip()
+            tablename = data.get('tablename', '').strip()
+            primarykey = data.get('primarykey', '').strip()
+            keytype = data.get('keytype', '').strip()
             cache = lsitcloud.objects.get(key=request.session.get('email'))
             # Create the table with on-demand capacity mode
             response = dynamodb.create_table(
-                TableName=table_name,
+                TableName=tablename,
                 KeySchema=[
-                    {'AttributeName': primary_key, 'KeyType': 'HASH'}
+                    {'AttributeName': primarykey, 'KeyType': 'HASH'}
                 ],
                 AttributeDefinitions=[
-                    {'AttributeName': primary_key, 'AttributeType': key_type}
+                    {'AttributeName': primarykey, 'AttributeType': keytype}
                 ],
                 BillingMode='PAY_PER_REQUEST'  # Set on-demand billing mode
             )
@@ -71,6 +71,7 @@ def createtable(request):
             items["lsdb"]["lsdbtables"][response['TableDescription']['TableName']] = {
                 "tablename": response['TableDescription']['TableName'],
                 "primarykey": response['TableDescription']['KeySchema'][0]['AttributeName'],
+                "primarykeytype": response['TableDescription']['AttributeDefinitions'][0]['AttributeType'],
                 "createdon": response['TableDescription']['CreationDateTime'].strftime("%Y-%m-%d %H:%M:%S")
             }
             table = resource.Table('lsit-developments')
@@ -84,13 +85,13 @@ def createtable(request):
 def lsdbtabledetails(request):
     default_theme = Myadmin.objects.get(key="default_theme")
     if request.session.get('email'):
-        query = request.GET.get('tablename', '')
-        if not query:
+        tablename = request.GET.get('tablename', '')
+        if not tablename:
             return "Table name is required", 400
-        table = resource.Table(query)
+        table = resource.Table(tablename)
         # Describe the table to get the key schema
         try:
-            table_info = dynamodb.describe_table(TableName=query)
+            table_info = dynamodb.describe_table(TableName=tablename)
         except dynamodb.exceptions.ResourceNotFoundException:
             return "Table not found", 404
         
@@ -104,40 +105,99 @@ def lsdbtabledetails(request):
         items = response['Items']
 
         if not items:
-            return render(request, "lsdbtabledetails.html", {"default_theme": default_theme.value, "email": request.session.get('email'), "fullname": request.session.get('fullname'), "tablename":  query, "tableitems": '<table class="table table-bordered text-nowrap border-bottom" id="responsive-datatable"><thead><tr><th></th></tr></thead><tbody></tbody></table>'})
-
-        # Generate the headers, prioritizing primary keys first
-        headers = ''.join(f"<th class='wd-20p'>{key} (Primary Key)</th>" for key in primary_keys)
-        other_headers = ''.join(
-            f"<th class='wd-20p'>{header}</th>" for header in items[0].keys() if header not in primary_keys
-        )
-        headers += other_headers
-
-        # Generate the rows, ensuring primary keys appear first
-        rows = ''.join(
-            f"<tr>"
-            + ''.join(f"<td><a href='lsdbtableitems?tablename={query}&primarykeyvalue={item.get(key, '')}'>{item.get(key, '')}<a></td>" for key in primary_keys)
-            + ''.join(f"<td>{json_to_ul(item.get(header, ''))}</td>" for header in items[0].keys() if header not in primary_keys)
-            + f"</tr>"
-            for item in items
-        )
+            return render(request, "lsdbtabledetails.html", {"default_theme": default_theme.value, "email": request.session.get('email'), "fullname": request.session.get('fullname'), "tablename": tablename, "tableitems": '<table class="table table-bordered text-nowrap border-bottom" id="responsive-datatable"><thead><tr><th></th></tr></thead><tbody></tbody></table>'})
 
         # Generate the final HTML table
-        final_html = f"""
-            <table class="table table-bordered text-nowrap border-bottom" id="responsive-datatable">
-                <thead>
-                    <tr>
-                        {headers}
-                    </tr>
-                </thead>
-                <tbody>
-                    {rows}
-                </tbody>
-            </table>
-        """
-        return render(request, "lsdbtabledetails.html", {"default_theme": default_theme.value, "email": request.session.get('email'), "fullname": request.session.get('fullname'), "tablename":  query, "tableitems": final_html})
+        final_html = json_to_table(items, primary_keys, tablename)
+        return render(request, "lsdbtabledetails.html", {"default_theme": default_theme.value, "email": request.session.get('email'), "fullname": request.session.get('fullname'), "tablename": tablename, "tableitems": final_html})
     else:
         return render(request, "login.html", {"default_theme": default_theme.value})
+
+def json_to_table(json_data, primary_keys, tablename):
+    def collect_keys(data):
+        keys = set()
+        for item in data:
+            if isinstance(item, dict):
+                for key, value in item.items():
+                    keys.add(key)
+                    if isinstance(value, dict) or isinstance(value, list):
+                        keys.update(collect_keys([value]))
+            elif isinstance(item, list):
+                keys.update(collect_keys(item))
+        return keys
+
+    # Gather all keys from the data
+    all_keys = collect_keys(json_data)
+    other_keys = [key for key in all_keys if key not in primary_keys]
+
+    # Start the table
+    table_html = "<table class='table'>"
+
+    # Generate headers
+    headers = ""
+    for key in primary_keys:
+        headers += f"<th class='wd-15p'>{key} (Primary Key)</th>"
+    for key in other_keys:
+        headers += f"<th class='wd-10p'>{key}</th>"
+    headers += "<th class='wd-20p'>Actions</th>"  # Add Actions header
+    table_html += f"<thead><tr>{headers}</tr></thead>"
+
+    # Generate rows
+    rows = ""
+    for item in json_data:
+        row = "<tr>"
+        # Add primary key values with links
+        for key in primary_keys:
+            value = resolve_nested_value(item, key)
+            row += f"<td><a href='lsdbtableitems?tablename={tablename}&primarykeyvalue={value}'>{value}</a></td>"
+        # Add other keys
+        for key in other_keys:
+            value = resolve_nested_value(item, key)
+            row += f"<td>{json_to_ul(value)}</td>"
+            # Add delete button
+    
+        for key in primary_keys:
+            value = resolve_nested_value(item, key)
+            row += f"<td><button class='btn btn-danger' onclick='deleteattribute(\"{tablename}\", \"{value}\")'><i class=\"far fa-trash-alt\"></i></button></td>"
+        row += "</tr>"
+        rows += row
+
+    # Add rows to the table
+    table_html += f"<tbody>{rows}</tbody>"
+
+    # End the table
+    table_html += "</table>"
+
+    return table_html
+
+
+# Helper function to resolve nested keys dynamically
+def resolve_nested_value(data, key):
+    if isinstance(data, dict) and key in data:
+        return data[key]
+    if isinstance(data, dict):
+        for k, v in data.items():
+            if isinstance(v, (dict, list)):
+                result = resolve_nested_value(v, key)
+                if result is not None:
+                    return result
+    if isinstance(data, list):
+        for item in data:
+            result = resolve_nested_value(item, key)
+            if result is not None:
+                return result
+    return ""
+
+
+# Helper function to convert nested JSON into <ul>
+def json_to_ul(value):
+    if isinstance(value, dict):
+        return "<ul>" + "".join(f"<li>{k}: {json_to_ul(v)}</li>" for k, v in value.items()) + "</ul>"
+    elif isinstance(value, list):
+        return "<ul>" + "".join(f"<li>{json_to_ul(v)}</li>" for v in value) + "</ul>"
+    else:
+        return str(value)
+
 
 def lsdbtableitems(request):
     default_theme = Myadmin.objects.get(key="default_theme")
@@ -168,6 +228,39 @@ def lsdbputitems(request):
             tabledata = data.get('tabledata', '')
             table = resource.Table(tablename)
             table.put_item(Item=tabledata)
+            return JsonResponse({'success': True})
+        except Exception as e:
+            return JsonResponse({'success': False, 'error': str(e)})
+        
+def lsdbdeletetable(request):
+    if request.method == 'POST':
+        try:
+            data = json.loads(request.body)
+            tablename = data.get('tablename', '').strip()
+            cache = lsitcloud.objects.get(key=request.session.get('email'))
+            dynamodb.delete_table(TableName=tablename)
+            items = json.loads(cache.value)
+            del items["lsdb"]["lsdbtables"][tablename]
+            cache.value = json.dumps(items)
+            cache.save()
+            return JsonResponse({'success': True})
+        except Exception as e:
+            return JsonResponse({'success': False, 'error': str(e)})
+
+def lsdbdeleteattribute(request):
+    if request.method == 'POST':
+        try:
+            data = json.loads(request.body)
+            tablename = data.get('tablename', '').strip()
+            primarykeyvalue = data.get('primarykeyvalue', '').strip()
+            cache = json.loads(lsitcloud.objects.get(key=request.session.get('email')).value)
+            # Construct the Key
+            key = {cache['lsdb']['lsdbtables'][tablename]['primarykey']: {cache['lsdb']['lsdbtables'][tablename]['primarykeytype']: primarykeyvalue}}
+            # Perform the delete operation
+            dynamodb.delete_item(
+                TableName=tablename,
+                Key=key
+            )
             return JsonResponse({'success': True})
         except Exception as e:
             return JsonResponse({'success': False, 'error': str(e)})

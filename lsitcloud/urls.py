@@ -11,7 +11,9 @@ urlpatterns = [
     path('lsdbtables', lsdb.lsdbtables, name='lsdbtables'),
     path('lsdbtabledetails', lsdb.lsdbtabledetails, name='lsdbtabledetails'),
     path('lsdbtableitems', lsdb.lsdbtableitems, name='lsdbtableitems'),
-    path('createtable', lsdb.createtable, name='createtable'),
+    path('lsdbcreatetable', lsdb.lsdbcreatetable, name='lsdbcreatetable'),
+    path('lsdbdeletetable', lsdb.lsdbdeletetable, name='lsdbdeletetable'),
+    path('lsdbdeleteattribute', lsdb.lsdbdeleteattribute, name='lsdbdeleteattribute'),
     path('lsdbputitems', lsdb.lsdbputitems, name='lsdbputitems'),
     path('lsdbapi', lsdb.lsdbapi, name='lsdbapi')
 ]
