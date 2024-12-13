@@ -45,29 +45,31 @@
 										<a href="javascript:void(0);" class="btn d-block btn-primary light my-3"><i class="fa fa-google me-2"></i>Login with Google</a>
 										<a href="javascript:void(0);" class="btn d-block btn-primary light my-3"><i class="fa fa-facebook-f me-2"></i>Login with Facebook</a>
 									</div>-->
-									<form action="https://vora-node.scriptlelo.com/node/demo/login-store" method="post">
+									<form action="{% url 'techmarklogin' %}" method="POST">
+										{% csrf_token %}
 										<div class="mb-3">
 											<label class="mb-1"><strong>Email</strong></label>
-											<input type="email" class="form-control" placeholder="Enter Your Email">
+											<input type="email" class="form-control" name="email" placeholder="Enter Your Email">
 										</div>
 										<div class="mb-3">
 											<label class="mb-1"><strong>Password</strong></label>
-											<input type="password" class="form-control" placeholder="Enter Password">
+											<input type="password" class="form-control" name="password" placeholder="Enter Password">
 										</div>
-										<div class="row d-flex justify-content-between mt-4 mb-2">
-											<div class="mb-3">
+										<div class="row d-flex justify-content-between mt-4">
+											<div class="mb-1">
 											   <div class="form-check custom-checkbox ms-1">
 													<input type="checkbox" class="form-check-input" id="basic_checkbox_1">
 													<label class="form-check-label" for="basic_checkbox_1">Remember</label>
 												</div>
 											</div>
 										</div>
+										<div class="mb-3">
+											<input type="submit" class="form-control btn btn-primary my-3">
+										</div>
 										<div class="text-center">
-											<div class="login-social">
-												<a href="javascript:void(0);" class="btn d-block btn-primary my-3">Login</a>
-											</div>
 											<div class="mb-3">
-												<a href="techmarksignup">Create Account</a> /
+												<p>{{ message }}</p>
+												<a href="register">Create Account</a> /
 												<a href="page-forgot-password.html">Forgot Password?</a>
 											</div>
 										</div>
@@ -85,5 +87,6 @@
 	<script src="{% static 'techmark/js/custom.min.js' %}"></script>
 	<script src="{% static 'techmark/js/dlabnav-init.js' %}"></script>
 	<script src="{% static 'techmark/js/styleSwitcher.js' %}"></script>
+	<script src="{% static 'techmark/auth.js' %}"></script>
 </body>
 </html>

@@ -17,7 +17,6 @@
 	<title>TechMark Solutions</title>
 	<!-- FAVICONS ICON -->
 	<link rel="icon" type="image/png" sizes="16x16" href="{% static 'techmark/images/logo.png' %}">
-	<link href="{% static 'techmark/vendor/jquery-nice-select/css/nice-select.css' %}" rel="stylesheet">
 	<link href="https://fonts.googleapis.com/css2?family=Material+Icons"rel="stylesheet">
 	<link href="{% static 'techmark/css/style.css' %}" rel="stylesheet">
 </head>
@@ -41,44 +40,39 @@
                                                 <a href="javascript:void(0);" class="btn d-block btn-primary light my-3"><i class="fa fa-google me-2"></i>Login with Google</a>
                                                 <a href="javascript:void(0);" class="btn d-block btn-primary light my-3"><i class="fa fa-facebook-f me-2"></i>Login with Facebook</a>
                                             </div>-->
-                                            <form action="https://vora-node.scriptlelo.com/node/demo/login-store" method="post">
+                                            <form id="registerform">
                                                 <div class="mb-3">
                                                     <label class="mb-1"><strong>Fullname</strong></label>
-                                                    <input type="text" class="form-control" placeholder="Enter Your Fullname">
+                                                    <input type="text" id="fullname" class="form-control" placeholder="Enter Your Fullname" required>
                                                 </div>
                                                 <div class="mb-3">
                                                     <label class="mb-1"><strong>Email</strong></label>
-                                                    <input type="email" class="form-control" placeholder="Enter Your Email">
+                                                    <input type="email" id="email" class="form-control" placeholder="Enter Your Email" required>
                                                 </div>
                                                 <div class="mb-3">
                                                     <label class="mb-1"><strong>Contact Number</strong></label>
-                                                    <input type="tel" class="form-control" placeholder="Enter Your Contact Number">
+                                                    <input type="tel" id="contact_number" class="form-control" placeholder="Enter Your Contact Number" required>
                                                 </div>
                                                 <div class="mb-3">
                                                     <label class="mb-1"><strong>Password</strong></label>
-                                                    <input type="password" class="form-control" placeholder="Password">
+                                                    <input type="password" id="password" class="form-control" placeholder="Password" required>
                                                 </div>
                                                 <div class="mb-3">
                                                     <label class="mb-1"><strong>Confirm Password</strong></label>
-                                                    <input type="password" class="form-control" placeholder="Confirm Password">
-                                                </div>
-                                                <div class="row d-flex justify-content-between mt-4 mb-2">
-                                                    <div class="mb-3">
-                                                       <div class="form-check custom-checkbox ms-1">
-                                                            <input type="checkbox" class="form-check-input" id="basic_checkbox_1">
-                                                            <label class="form-check-label" for="basic_checkbox_1">Remember</label>
-                                                        </div>
-                                                    </div>
+                                                    <input type="password" id="confirm_password" class="form-control" placeholder="Confirm Password" required>
                                                 </div>
                                                 <div class="text-center">
                                                     <div class="login-social">
-                                                        <a href="javascript:void(0);" class="btn d-block btn-primary light my-3">Login</a>
+                                                        <a href="javascript:void(0);" onclick="register()" class="btn d-block btn-primary light my-3">Signup</a>
+                                                        <p id="message"></p>
                                                     </div>
                                                     <div class="mb-3">
                                                         Already Have account? <a href="techmarklogin">Signin</a>
                                                     </div>
                                                 </div>
                                             </form>
+                                            <form id="otpform"></form>
+                                            
                                         </div>
                                     </div>
                                 </div>
@@ -90,9 +84,6 @@
 		</div>
 	</div>
 	<!-- Required vendors -->
-	<script src="{% static 'techmark/vendor/global/global.min.js' %}"></script>
-	<script src="{% static 'techmark/js/custom.min.js' %}"></script>
-	<script src="{% static 'techmark/js/dlabnav-init.js' %}"></script>
-	<script src="{% static 'techmark/js/styleSwitcher.js' %}"></script>
+    <script src="{% static 'techmark/auth.js' %}"></script>
 </body>
 </html>

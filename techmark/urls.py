@@ -6,5 +6,7 @@ urlpatterns = [
     path('index', views.index, name='index'),  # Example route
     path('addcampaign', views.addcampaign, name='addcampaign'),  # Example route
     path('techmarklogin', views.techmarklogin, name='techmarklogin'),  # Example route
-    path('techmarksignup', views.techmarksignup, name='techmarksignup')  # Example route
+    path('register', views.register, name='register'),  # Example route
+    path('verifyotp', views.verifyotp, name='verifyotp'),
+    path('logout', views.logout, name='logout'),
 ]

@@ -1,12 +1,34 @@
-async function register(event) {
+async function register(){
+    const form = document.getElementById('registerform');
+    const fullname = form.fullname.value.trim();
+    const email = form.email.value.trim();
+    const contactNumber = form.contact_number.value.trim();
+    const password = form.password.value;
+    const confirmPassword = form.confirm_password.value;
     document.getElementById("message").innerHTML = "OTP Sent on email";
-    event.preventDefault();  // Prevent the default form submission
-    const form = event.target;
-    const formData = new FormData(form);
+
+    // Check for missing fields
+    if (!fullname || !email || !contactNumber || !password || !confirmPassword) {
+        return alert("Missing some fields");
+    }
+
+    // Check if passwords match
+    if (password !== confirmPassword) {
+        return alert("Passwords do not match.");
+    }
+    // Construct the data object
+    const item = {
+        "fullname": fullname,
+        "email": email,
+        "contact-number": contactNumber,
+        "password": password,
+        "createdon": new Date().toISOString().slice(0, 19).replace("T", " ")
+    };
+
     try {
-        const response = await fetch('signup', {
+        const response = await fetch('register', {
             method: 'POST',
-            body: formData,
+            body: JSON.stringify(item),
             headers: {
                 'X-CSRFToken': getCookie('csrftoken')  // Add CSRF token for Django
             }
@@ -15,15 +37,21 @@ async function register(event) {
         if (response.ok) {
             const data = await response.json();
             if(data["success"]){
-                document.getElementById("signupForm").innerHTML = "";
-                document.getElementById("otpForm").innerHTML = 
-                `<div class="row">
-                    <div class="form-group col-xl-12">
-                        <label>OTP</label> <input class="form-control" name="otp" placeholder="Enter your otp" type="text">
-                    </div>
+                document.getElementById("registerform").innerHTML = "";
+                document.getElementById("otpform").innerHTML = 
+                `<div class="mb-3">
+                    <label class="mb-1"><strong>OTP</strong></label>
+                    <input type="text" id="otp" class="form-control" placeholder="Enter OTP" required>
                 </div>
-                <button type="submit" class="btn btn-primary btn-block">Confirm</button>
-                <p class="text-center mt-3"id="message"></p>`;
+                <div class="text-center">
+                    <div class="login-social">
+                        <a href="javascript:void(0);" onclick="verifyotp()" class="btn d-block btn-primary light my-3">Verify OTP</a>
+                        <p id="message"></p>
+                    </div>
+                    <div class="mb-3">
+                        Already Have account? <a href="techmarklogin">Signin</a>
+                    </div>
+                </div>`;
             }else{
                 document.getElementById("message").innerHTML = data["message"];
             }
@@ -36,14 +64,24 @@ async function register(event) {
     }
 }
 
-async function verifyotp(event) {
-    event.preventDefault();  // Prevent the default form submission
-    const form = event.target;
-    const formData = new FormData(form);
+async function verifyotp(){
+    const form = document.getElementById('otpform');
+    const otp = form.otp.value.trim();
+
+    // Check for missing fields
+    if (!otp) {
+        return alert("Missing OTP");
+    }
+
+    // Construct the data object
+    const item = {
+        "otp": otp
+    };
+
     try {
         const response = await fetch('verifyotp', {
             method: 'POST',
-            body: formData,
+            body: JSON.stringify(item),
             headers: {
                 'X-CSRFToken': getCookie('csrftoken')  // Add CSRF token for Django
             }
@@ -53,11 +91,10 @@ async function verifyotp(event) {
             const data = await response.json();
             if(data["success"]){
                 document.getElementById("message").innerHTML = data["message"];
-                location = "dashboard";
+                location = "techmarklogin";
             }else{
                 document.getElementById("message").innerHTML = data["message"];
             }
-            form.reset();  // Optionally reset the form fields
         } else {
             const errorData = await response.json();
             console.log(errorData)
@@ -76,20 +113,6 @@ function logout(){
             "X-CSRFToken": getCookie('csrftoken'),
         },
     })
-    /*.then(response => {
-        if (response.ok) {
-            return response.json(); // Parse JSON only if the response is OK
-        } else {
-            throw new Error(`HTTP error! Status: ${response.status}`);
-        }
-    }).then(data => {
-        // Process the data if the response was OK
-        document.getElementById("response-message").innerText = data.message;
-    }).catch(error => {
-        // Handle errors (e.g., non-200 responses)
-        console.error("Error:", error);
-        document.getElementById("response-message").innerText = "An error occurred.";
-    });*/
 }
 
 // CSRF Token helper function (for Django)
