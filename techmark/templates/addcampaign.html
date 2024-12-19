@@ -181,8 +181,7 @@
                       <button type="button" class="btn btn-outline-light dropdown-toggle" data-bs-toggle="dropdown">Select Sender</button>
                       <div class="dropdown-menu">
                         <a class="dropdown-item" href="javascript:void(0);" data-bs-toggle="modal" data-bs-target=".select-sender-model-xl">Manage Sender</a>
-                        <a class="dropdown-item" href="javascript:void(0);">Link 2</a>
-                        <a class="dropdown-item" href="javascript:void(0);">Link 3</a>
+                        {{ senders|safe }}
                       </div>
                     </div>
                   </div>
@@ -258,13 +257,7 @@
                                           </tr>
                                       </thead>
                                       <tbody id="verifiedemailslist">
-                                        <tr>
-                                          <td data-label="Name">Name</td>
-                                          <td data-label="Sender">Sender</td>
-                                          <td data-label="Useremail">Useremail</td>
-                                          <td data-label="Verified on">Verified on</td>
-                                          <td data-label="Status">Status</td>
-                                        </tr>
+                                        {{ active_aliases|safe }}
                                       </tbody>
                                     </table>
                                   </div>
@@ -274,17 +267,17 @@
                                     <div id="domaininfo">No Data Found</div>
                                   </div>
                                   <div id="v-pills-create-alias" class="tab-pane fade">
-                                    <h5 class="modal-title" id="myLargeModalLabel">Create New Alise</h5>
+                                    <h5 class="modal-title" id="myLargeModalLabel">Create New Alias</h5>
                                     <p>Authenticate Your email to create new Alise</p><hr>
-                                    <form action="">
-                                        <input type="text" class="form-control" id="newemailname" placeholder="Name">
-                                        <input type="email" class="form-control" id="newemail" oninput="getEmail()" placeholder="Email" novalidate>
-                                        <input type="text" class="form-control" id="newaliasemail" placeholder="Alias Email" novalidate>
-                                        <input type="password" class="form-control" id="newemailpassword" placeholder="Password" novalidate>
+                                    <form id="createalias" onsubmit="validateemailcredentials(); return false">
+                                        <input type="text" class="form-control" id="sendername" placeholder="Name">
+                                        <input type="email" class="form-control" id="senderemail" placeholder="Email" required novalidate>
+                                        <input type="email" class="form-control" id="newaliasemail" placeholder="Alias Email" novalidate>
+                                        <input type="password" class="form-control" id="newemailpassword" placeholder="Password" required novalidate>
                                         <div class="d-grid gap-2" style="text-align:center;">
-                                          <button type="button" class="btn rounded-pill btn-primary">VERIFY</button>
+                                          <button type="submit" class="btn rounded-pill btn-primary">VERIFY</button>
+                                          <div class="row mb-3" id="isverified"></div>
                                         </div>
-                                        <div class="row mb-3" id="domaininfolog"></div>
                                     </form>
                                   </div>
                               </div>
@@ -340,7 +333,6 @@
         </div>
       </div>
     </div>
-
 
 		<!--****** Footer start *******-->
 		<div class="footer">

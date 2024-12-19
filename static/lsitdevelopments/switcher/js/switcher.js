@@ -33,5 +33,3 @@ jQuery('.page').click(function(){
 		});						
 	}
 });
-
-

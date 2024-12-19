@@ -3,9 +3,8 @@ from myadmin.models import Myadmin
 from lsitcloud.models import lsitcloud
 from django.http import JsonResponse
 import simplejson as json
-from decimal import Decimal
 import boto3
-# Initialize DynamoDB resource
+
 session = boto3.Session(
     aws_access_key_id="AKIAZI2LE6EX5MT67CT5",
     aws_secret_access_key="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",
@@ -170,7 +169,6 @@ def json_to_table(json_data, primary_keys, tablename):
 
     return table_html
 
-
 # Helper function to resolve nested keys dynamically
 def resolve_nested_value(data, key):
     if isinstance(data, dict) and key in data:
@@ -188,7 +186,6 @@ def resolve_nested_value(data, key):
                 return result
     return ""
 
-
 # Helper function to convert nested JSON into <ul>
 def json_to_ul(value):
     if isinstance(value, dict):
@@ -197,7 +194,6 @@ def json_to_ul(value):
         return "<ul>" + "".join(f"<li>{json_to_ul(v)}</li>" for v in value) + "</ul>"
     else:
         return str(value)
-
 
 def lsdbtableitems(request):
     default_theme = Myadmin.objects.get(key="default_theme")

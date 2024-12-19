@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from django.http import JsonResponse
+from techmark.models import techmark
 from django.contrib.auth.hashers import make_password
 from django.contrib.auth.hashers import check_password
 import json, random, requests, boto3
@@ -7,11 +8,10 @@ import json, random, requests, boto3
 session = boto3.Session(
     aws_access_key_id="AKIAZI2LE6EX5MT67CT5",
     aws_secret_access_key="ixYVq+GE4A6xxeWlcGxajyZ92mRe5M0LxNoq0fyq",
-    #aws_session_token="your-session-token",  # Only required if using temporary credentials
-    region_name="ap-south-1"  # Make sure the region is correct
+    region_name="ap-south-1"
 )
-dynamodb = session.resource('dynamodb', region_name='ap-south-1')  # Use your AWS region
-table = dynamodb.Table('techmark-solutions')  # Replace with your DynamoDB table name
+dynamodb = session.resource('dynamodb', region_name='ap-south-1')
+table = dynamodb.Table('techmark-solutions')
 
 def index(request):
     if request.session.get('email'):
@@ -24,8 +24,6 @@ def techmarklogin(request):
         email = request.POST.get('email')
         password = request.POST.get('password')
         remember_me = True
-        
-        # Retrieve user from DynamoDB based on email (assuming the username is the email)
         user = None
         try:
             response = table.get_item(Key={'email': email})
@@ -34,11 +32,12 @@ def techmarklogin(request):
             user = None
         
         if user:
-            # Check if the password matches the stored hashed password
             if check_password(password, user['userinfo']['password']):
-                # Log the user in using Django's session
                 request.session['fullname'] = user['userinfo']['fullname']
                 request.session['email'] = user['userinfo']['email']
+                obj, created = techmark.objects.get_or_create(key=user['userinfo']['email'])
+                obj.value = json.dumps(user)
+                obj.save()
                 # Handle session expiration for "Remember Me"
                 if remember_me:
                     # Set the session to expire in 30 days if "Remember Me" is checked
@@ -47,12 +46,10 @@ def techmarklogin(request):
                     # Default session expiration (when the browser is closed)
                     request.session.set_expiry(0)  # Expire when the browser is closed
                 
-                # Send success response
                 return index(request)
             else:
                 return render(request, "techmarklogin.html", {"message": "Incorrect Password"})
         else:
-            # User not found in the database
             return render(request, "techmarklogin.html", {"message": "User Not Found"})
 
     else:
@@ -84,7 +81,7 @@ def register(request):
         payload = {
             "fullname": data["fullname"],
             "email": data["email"],
-            "code": otp  # Generated OTP code
+            "code": otp
         }
 
         # Send OTP and handle response
@@ -169,9 +166,6 @@ def verifyotp(request):
             return JsonResponse({"success": False, "message": "Incorrect OTP"})
 
     return JsonResponse({"success": False, "message": "Invalid request."})
-
-def addcampaign(request):
-    return render(request, "addcampaign.html")
 
 def logout(request):
     request.session.flush()

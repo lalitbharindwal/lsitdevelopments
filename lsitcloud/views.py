@@ -6,15 +6,13 @@ from django.contrib.auth.hashers import make_password
 from django.contrib.auth.hashers import check_password
 import boto3, random, requests, json
 
-# Initialize DynamoDB resource
 session = boto3.Session(
     aws_access_key_id="AKIAZI2LE6EX5MT67CT5",
     aws_secret_access_key="ixYVq+GE4A6xxeWlcGxajyZ92mRe5M0LxNoq0fyq",
-    #aws_session_token="your-session-token",  # Only required if using temporary credentials
-    region_name="ap-south-1"  # Make sure the region is correct
+    region_name="ap-south-1"
 )
-dynamodb = session.resource('dynamodb', region_name='ap-south-1')  # Use your AWS region
-table = dynamodb.Table('lsit-developments')  # Replace with your DynamoDB table name
+dynamodb = session.resource('dynamodb', region_name='ap-south-1')
+table = dynamodb.Table('lsit-developments')
 
 # Create your views here.
 def home(request):
@@ -188,7 +186,5 @@ def verifyOtp(request):
     return JsonResponse({"success": False, "message": "Invalid request."})
 
 def logout(request):
-    # Clear all session data
-    #lsitcloud.objects.filter(key=request.session.get('email')).delete()
     request.session.flush()
     return JsonResponse({"status": "success", "message": "Logout Successfully"})

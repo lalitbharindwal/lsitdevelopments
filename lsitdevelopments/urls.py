@@ -18,9 +18,9 @@ from django.contrib import admin
 from django.urls import path, include
 
 urlpatterns = [
-    path('', include('myadmin.urls')),  # Include the app's URLs
+    path('', include('myadmin.urls')),
     path('webadmin/', admin.site.urls),
-    path('myadmin/', include('myadmin.urls')),  # Include the app's URLs
-    path('lsitcloud/', include('lsitcloud.urls')),  # Include the app's URLs
-    path('techmark/', include('techmark.urls'))  # Include the app's URLs
+    path('myadmin/', include('myadmin.urls')),
+    path('lsitcloud/', include('lsitcloud.urls')),
+    path('techmark/', include('techmark.urls'))
 ]
