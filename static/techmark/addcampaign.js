@@ -154,22 +154,24 @@ async function selectsender(sender){
                 document.getElementById("domaininfo").innerHTML = domaininfo_table;
             }else{
                 document.getElementById("sender").innerHTML = "Select Sender";
-                if(key == sender){
-                    aliastable += `<tr>
-                    <td data-label="Name">${data["items"][key]["sendername"]}</td>
-                    <td data-label="Sender">${data["items"][key]["newaliasemail"]}</td>
-                    <td data-label="Verified on">${data["items"][key]["createdon"]}</td>
-                    <td data-label="Status"><span class="badge bg-danger me-1 my-2">Inactive</span></td>
-                    </tr>`;
-                    senders += `<a class='dropdown-item' href='javascript:void(0);'>${data["items"][key]["newaliasemail"]}</a>`;
-                }else{
-                    aliastable += `<tr>
-                    <td data-label="Name">${data["items"][key]["sendername"]}</td>
-                    <td data-label="Sender">${data["items"][key]["newaliasemail"]}</td>
-                    <td data-label="Verified on">${data["items"][key]["createdon"]}</td>
-                    <td data-label="Status" onclick="selectsender('${data["items"][key]["newaliasemail"]}')"><span class="badge bg-primary me-1 my-2">Select</span></td>
-                    </tr>`;
-                    senders += `<a class='dropdown-item' href='javascript:void(0);'>${data["items"][key]["newaliasemail"]}</a>`;
+                for (const key of Object.keys(data["items"])) {
+                    if(key == sender){
+                        aliastable += `<tr>
+                        <td data-label="Name">${data["items"][key]["sendername"]}</td>
+                        <td data-label="Sender">${data["items"][key]["newaliasemail"]}</td>
+                        <td data-label="Verified on">${data["items"][key]["createdon"]}</td>
+                        <td data-label="Status"><span class="badge bg-danger me-1 my-2">Inactive</span></td>
+                        </tr>`;
+                        senders += `<a class='dropdown-item' href='javascript:void(0);'>${data["items"][key]["newaliasemail"]}</a>`;
+                    }else{
+                        aliastable += `<tr>
+                        <td data-label="Name">${data["items"][key]["sendername"]}</td>
+                        <td data-label="Sender">${data["items"][key]["newaliasemail"]}</td>
+                        <td data-label="Verified on">${data["items"][key]["createdon"]}</td>
+                        <td data-label="Status" onclick="selectsender('${data["items"][key]["newaliasemail"]}')"><span class="badge bg-primary me-1 my-2">Select</span></td>
+                        </tr>`;
+                        senders += `<a class='dropdown-item' href='javascript:void(0);'>${data["items"][key]["newaliasemail"]}</a>`;
+                    }
                 }
             }
         } else {
