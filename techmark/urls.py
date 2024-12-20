@@ -9,5 +9,6 @@ urlpatterns = [
     path('verifyotp', views.verifyotp, name='verifyotp'),
     path('logout', views.logout, name='logout'),
     path('addcampaign', emailcampaign.addcampaign, name='addcampaign'),  # Example route
-    path('createalias', emailcampaign.createalias, name='createalias')
+    path('createalias', emailcampaign.createalias, name='createalias'),
+    path('authenticatesender', emailcampaign.authenticatesender, name='authenticatesender')
 ]

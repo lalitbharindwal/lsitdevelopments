@@ -256,11 +256,10 @@ def addcampaign(request):
             active_aliases += f"""<tr>
                  <td data-label="Name">{cache["email-campaigns"]["email-credentials"][key]["sendername"]}</td>
                  <td data-label="Sender">{cache["email-campaigns"]["email-credentials"][key]["newaliasemail"]}</td>
-                 <td data-label="Useremail">{cache["email-campaigns"]["email-credentials"][key]["senderemail"]}</td>
                  <td data-label="Verified on">{cache["email-campaigns"]["email-credentials"][key]["createdon"]}</td>
-                 <td data-label="Status">Select</td>
+                 <td data-label="Status" onclick="selectsender('{cache["email-campaigns"]["email-credentials"][key]["newaliasemail"]}')"><span class="badge bg-primary me-1 my-2">Select</span></td>
                 </tr>"""
-            senders += f"<a class='dropdown-item' href='javascript:void(0);'>{cache["email-campaigns"]["email-credentials"][key]["newaliasemail"]}</a>"
+            senders += f"<a class='dropdown-item' href='javascript:void(0);' onclick=\"selectsender('{cache['email-campaigns']['email-credentials'][key]['newaliasemail']}')\">{cache['email-campaigns']['email-credentials'][key]['newaliasemail']}</a>"
         return render(request, "addcampaign.html", {"active_aliases": active_aliases, "senders": senders})
     else:
         return render(request, "techmarklogin.html")
@@ -269,9 +268,9 @@ def createalias(request):
     if request.method == 'POST':
         # Get input from form
         credential = json.loads(request.body)
-        senderemail = credential["senderemail"]
+        senderemail = credential["useremail"]
         aliasemail = credential["newaliasemail"]
-        password = credential["newemailpassword"]
+        password = credential["password"]
         smtp_port = 587
         domaininfo = domain_info(senderemail.split('@')[-1])
         if(domaininfo["domaininfo"]["dnsinfo"]):
@@ -316,4 +315,35 @@ def createalias(request):
                     "success": None,
                     "domaininfo": json.dumps(domaininfo, default=json_default),
                     "message": "Verification Unsuccessful"
+                })
+        
+def authenticatesender(request):
+    if request.method == 'POST':
+        senderemail = json.loads(request.body)["senderemail"]
+        cache = json.loads(techmark.objects.get(key=request.session.get('email')).value)
+        useremail = cache["email-campaigns"]["email-credentials"][senderemail]["useremail"]
+        password = cache["email-campaigns"]["email-credentials"][senderemail]["password"]
+        smtp_port = 587
+        domaininfo = domain_info(senderemail.split('@')[-1])
+        if(domaininfo["domaininfo"]["dnsinfo"]):
+            if(check_smtp_login(domaininfo["domaininfo"]["smtp_server"], smtp_port, useremail, password)):
+                return JsonResponse({
+                    "success": True,
+                    "domaininfo": json.dumps(domaininfo, default=json_default),
+                    "message": "Verification Successful",
+                    "items": cache["email-campaigns"]["email-credentials"]
+                })
+            else:
+                return JsonResponse({
+                    "success": False,
+                    "domaininfo": json.dumps(domaininfo, default=json_default),
+                    "message": "Verification Failed",
+                    "items": cache["email-campaigns"]["email-credentials"]
+                })
+        else:
+            return JsonResponse({
+                    "success": None,
+                    "domaininfo": json.dumps(domaininfo, default=json_default),
+                    "message": "Verification Unsuccessful",
+                    "items": cache["email-campaigns"]["email-credentials"]
                 })
